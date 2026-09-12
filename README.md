@@ -14,6 +14,11 @@ Public, interactive summaries of India's crowd-funded protein-powder lab testing
 
 Start here → [`index.html`](index.html) (landing page linking both reports).
 
+## 📚 Source studies
+
+- **Project One (2024)** — Philips et al., *Medicine* 2024;103:14(e37724): [PMC10994440](https://pmc.ncbi.nlm.nih.gov/articles/PMC10994440/) · [MESH overview](https://meshindia.org/the-citizens-protein-project-one/)
+- **Project Two (2025)** — Philips et al., *Medicine* 2025;104:46(e45970): [PMC12622730](https://pmc.ncbi.nlm.nih.gov/articles/PMC12622730/) · [MESH overview](https://meshindia.org/introducing-the-citizens-protein-project-two/)
+
 ## 🔬 Source data (in this repo)
 
 2025 study — 8 Eureka Analytical Services lab PDFs:
@@ -37,11 +42,13 @@ Published paper + master chart:
 - `Old Project/gen_report.py` — generator script for the 2024 report
 - `Old Project/medi-103-e37724*.pdf/.docx/.xlsx` — Philips et al., *Medicine* 2024;103:14(e37724) + supplements
 
-## ⚠️ Disclaimer
+## ⚠️ Disclaimer — please read
 
-One batch per brand was tested; batch-to-batch variation is real.
-These pages summarise lab numbers — they are not medical advice.
-For personal health decisions, consult a qualified professional.
+- These pages were built with the help of **LLMs/AI** to visualise and summarise public lab data. AI assistance means transcription or interpretation errors are possible — **verify all values against the linked originals** before acting on them.
+- This is **not medical advice, not a product recommendation, and not an endorsement** of any brand.
+- This is an **independent project with no affiliation** with MESH, Rajagiri Hospital, Eureka/Neogen labs, the study authors, or any supplement brand.
+- One batch per brand was tested; batch-to-batch variation is real. For personal health decisions, consult a qualified professional.
+- The author accepts **no liability** for any decision made using this site.
 
 ## 📜 License
 

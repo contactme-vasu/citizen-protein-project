@@ -4,45 +4,123 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Citizen Protein Project — Interactive Lab Reports</title>
+<!--
+  Design plan (frontend-design skill, lab-ledger concept):
+  Color: paper #F7F8F5, ink #1A2E28, reagent amber #B45309 (single accent), quiet line #DDE3DC.
+  Type: Georgia serif for display only; system sans for everything else; sample codes as bordered chips.
+  Layout: left-aligned ruled ledger. Boldness lives in one place: the oversized headline + specimen-code strip.
+  Deliberately avoided: gradient washes, identical card grids, all-caps eyebrows, middle-dot meta strings, arrows on links.
+-->
 <style>
-  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:#f1f5f9;color:#0f172a}
-  header{background:linear-gradient(135deg,#052e16,#166534 55%,#0ea5e9);color:#fff;padding:48px 24px}
-  .wrap{max-width:900px;margin:0 auto}
-  h1{margin:0 0 8px;font-size:clamp(26px,4vw,38px)}
-  header p{opacity:.93}
-  main{padding:32px 24px}
-  .card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin-bottom:18px;box-shadow:0 2px 10px rgba(15,23,42,.05)}
-  .card h2{margin:0 0 6px}
-  .card p{color:#475569}
-  a.btn{display:inline-block;background:#16a34a;color:#fff;text-decoration:none;padding:10px 18px;border-radius:9px;font-weight:600;margin-top:8px}
-  a.btn.alt{background:#0284c7}
-  footer{color:#64748b;font-size:13px;padding:20px 24px;text-align:center}
-  .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#dcfce7;color:#166534}
-  .pill.blue{background:#e0f2fe;color:#075985}
+  *{box-sizing:border-box}
+  :root{--paper:#F7F8F5;--ink:#1A2E28;--amber:#B45309;--line:#DDE3DC;--soft:#4A5A53;--box:#FFFDF4}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.6}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
+  a{color:var(--amber)}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+  /* masthead */
+  .masthead{background:var(--ink);color:#F2F5F1;padding:56px 0 40px}
+  .masthead .kicker{font-size:14px;color:#B9C6BF;margin:0 0 12px}
+  .masthead h1{font-family:Georgia,"Times New Roman",serif;font-weight:700;
+    font-size:clamp(34px,6vw,58px);line-height:1.08;margin:0 0 14px;max-width:16ch}
+  .masthead .sub{font-size:17px;color:#D5DCD7;margin:0;max-width:62ch}
+  .codes{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .codes span{border:1px solid #5A6E65;border-radius:6px;padding:3px 10px;font-size:13px;font-weight:600;color:#E7EDE9}
+  .codes span.hit{background:var(--amber);border-color:var(--amber);color:#fff}
+  .codes-note{font-size:12px;color:#8FA098;margin-top:10px}
+  /* ledger */
+  main{padding:36px 0 8px}
+  .ledger{border-top:2px solid var(--ink)}
+  .row{display:grid;grid-template-columns:170px 1fr auto;gap:20px;align-items:start;
+    padding:24px 0;border-bottom:1px solid var(--line)}
+  .row .tag{font-size:13px;color:var(--soft);margin:2px 0 0}
+  .row .tag strong{display:block;color:var(--ink);font-size:14px}
+  .row h2{font-family:Georgia,serif;font-size:24px;margin:0 0 6px}
+  .row p{margin:0 0 12px;color:#33433C;max-width:60ch}
+  .open{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;
+    padding:10px 20px;border-radius:8px;font-weight:600;font-size:15px;white-space:nowrap}
+  .open.alt{background:var(--amber)}
+  .open:hover{filter:brightness(1.15)}
+  /* steps: a real sequence, so numbering earns its place */
+  .how{padding:28px 0;border-bottom:1px solid var(--line)}
+  .how h2,.refs h2{font-family:Georgia,serif;font-size:22px;margin:0 0 10px}
+  .how ol{margin:0;padding-left:24px;color:#33433C}
+  .how li{margin:6px 0;max-width:64ch}
+  /* references */
+  .refs{padding:28px 0;border-bottom:1px solid var(--line)}
+  .refs ul{list-style:none;margin:0;padding:0}
+  .refs li{padding:10px 0;border-bottom:1px dotted var(--line);font-size:15px}
+  .refs li:last-child{border-bottom:none}
+  .refs .yr{display:inline-block;min-width:52px;font-weight:700}
+  /* disclaimer stamp */
+  .stamp{background:var(--box);border:2px solid var(--amber);border-radius:4px;
+    padding:20px 22px;margin:28px 0;font-size:14px;color:#33433C}
+  .stamp h2{font-size:16px;margin:0 0 8px;color:var(--ink)}
+  .stamp p{margin:8px 0}
+  footer{padding:8px 0 40px;color:var(--soft);font-size:13px}
+  @media(max-width:700px){.row{grid-template-columns:1fr}.row .tag strong{display:inline}.row .tag strong::after{content:" — "}}
+  @media(prefers-reduced-motion:reduce){*{transition:none !important}}
 </style>
 </head>
 <body>
-<header><div class="wrap">
-  <h1>🥛 Citizen Protein Project — Interactive Lab Reports</h1>
-  <p>Crowd-funded, blind-coded lab testing of protein powders sold in India (MESH / Rajagiri Hospital). Pick a report below.</p>
+
+<header class="masthead"><div class="wrap">
+  <p class="kicker">Independent visualisation of two crowd-funded lab studies, built with AI</p>
+  <h1>What is actually in India&rsquo;s protein powders?</h1>
+  <p class="sub">Researchers bought powders off the shelf, tested them blind in accredited labs, and published every number. This site turns those tables into pages you can sort, filter, and compare.</p>
+  <div class="codes" aria-label="Blind sample codes from the studies">
+    <span>S2</span><span>S10</span><span>S11</span><span class="hit">S16</span><span>S31</span><span class="hit">S32</span><span>S33</span><span>S34</span>
+    <span>#12</span><span>#15</span><span>#21</span><span>#24</span><span>#25</span><span>#30</span>
+  </div>
+  <p class="codes-note">Blind codes from the lab reports. Highlighted: the two top-ranked 2025 wheys.</p>
 </div></header>
+
 <main><div class="wrap">
-  <div class="card">
-    <h2>2025 — Whey Concentrate &amp; Blends <span class="pill">latest</span></h2>
-    <p><b>8 whey products</b> from the 34-powder 2025 study. Protein, amino acids, sugar, taurine, heavy metals, aflatoxins, pesticides, steroids. Isolate-only products excluded. <br>Winner: <b>S16 The Whole Truth Concentrate</b> (top BCAA/leucine, all safety panels clean).</p>
-    <a class="btn" href="whey-protein-report.html">Open 2025 whey report →</a>
+  <div class="ledger">
+    <section class="row">
+      <p class="tag"><strong>Second study</strong>2025 · 34 powders · 8 wheys ranked here</p>
+      <div>
+        <h2>Whey concentrates and blends</h2>
+        <p>Protein density, full amino-acid profiles, sugars, and every safety panel, ranked side by side. Isolate-only products are excluded.</p>
+      </div>
+      <a class="open alt" href="whey-protein-report.html">Open the 2025 whey report</a>
+    </section>
+    <section class="row">
+      <p class="tag"><strong>First study</strong>2024 · 36 powders · whey, blends, plant</p>
+      <div>
+        <h2>All 36 powders against their labels</h2>
+        <p>Detected protein versus the label claim, plus heavy metals, aflatoxin, pesticides, and a full solvent scan.</p>
+      </div>
+      <a class="open" href="old-protein-report.html">Open the 2024 report</a>
+    </section>
   </div>
-  <div class="card">
-    <h2>2024 — All 36 powders <span class="pill blue">original study</span></h2>
-    <p><b>36 powders</b> (18 whey, 14 blends, 4 plant). Protein vs label claim, heavy metals, aflatoxin, pesticides, GC-MS solvent scan. <br>69.4% mislabelled • lead in 24/36 • zero steroids.</p>
-    <a class="btn alt" href="old-protein-report.html">Open 2024 report →</a>
-  </div>
-  <div class="card">
-    <h2>📄 Source data</h2>
-    <p>All 8 Eureka lab PDFs, the published papers (<i>Medicine</i> 2024 &amp; 2025) and the photographed master chart are in this repo — see <a href="https://github.com/">README</a> for the file list.</p>
-    <p style="font-size:13px">One batch per brand was tested; batch variation is real. Lab-data summaries, not medical advice.</p>
-  </div>
+
+  <section class="how">
+    <h2>How to read the reports</h2>
+    <ol>
+      <li>Sort any table by clicking its column headers, and filter to the products you care about.</li>
+      <li>Open Details on a product for its full lab profile in one place.</li>
+      <li>Drag the weights in Build your own score to re-rank everything by what matters to you.</li>
+    </ol>
+  </section>
+
+  <section class="refs">
+    <h2>Sources</h2>
+    <ul>
+      <li><span class="yr">2024</span> Philips et al., <i>Medicine</i> 103:14(e37724) — <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10994440/">full text at PubMed Central</a>, <a href="https://meshindia.org/the-citizens-protein-project-one/">MESH project page</a></li>
+      <li><span class="yr">2025</span> Philips et al., <i>Medicine</i> 104:46(e45970) — <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12622730/">full text at PubMed Central</a>, <a href="https://meshindia.org/introducing-the-citizens-protein-project-two/">MESH project page</a></li>
+    </ul>
+  </section>
+
+  <section class="stamp">
+    <h2>Read this first</h2>
+    <p>These pages were put together with the help of LLMs and AI to visualise public lab data, so transcription or interpretation errors are possible. Check any number that matters against the linked originals before acting on it.</p>
+    <p>Nothing here is medical advice, a product recommendation, or an endorsement of any brand. This is an independent project with no affiliation to MESH, Rajagiri Hospital, the testing labs, the study authors, or any supplement company, and the author accepts no liability for decisions made using this site. One batch per brand was tested, so a result describes that batch, not every tub on the shelf. For health decisions, talk to a qualified professional.</p>
+  </section>
+
+  <footer>Independent visualisation of Philips et al., <i>Medicine</i> 2024 and 2025.</footer>
 </div></main>
-<footer>Citizen Protein Project — interactive summaries of Philips et al., <i>Medicine</i> 2024 &amp; 2025.</footer>
+
 </body>
 </html>

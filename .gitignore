@@ -1,5 +1,6 @@
 # Agent / harness files — not part of the public site
 .agents/
+.pi/
 .scratch/
 skills-lock.json
 AGENTS.md
