@@ -6,7 +6,8 @@
 
 Each yearly report is a self-contained HTML file with inline CSS and `<script>`.
 The 2024 and 2025 reports duplicate the same shell: hero, tabs, modal, bar charts,
-score sliders. The generator (`Old Project/gen_report.py`) embeds a third copy
+score sliders. The retired generator (`Old Project/gen_report.py`, removed 12 Sep 2026 —
+2024 sources now live under `sources/2024/`) embedded a third copy
 as a string template.
 
 ## Decision

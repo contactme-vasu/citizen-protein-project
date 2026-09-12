@@ -5,6 +5,19 @@ Public, interactive summaries of India's crowd-funded protein-powder lab testing
 
 **Live site (after enabling GitHub Pages):** `https://<your-username>.github.io/<repo-name>/`
 
+```
+├── index.html                  ← landing page (start here)
+├── whey-protein-report.html    ← 2025 report (8 wheys)
+├── old-protein-report.html     ← 2024 report (36 powders)
+├── sources/                    ← original lab PDFs + papers (evidence)
+│   ├── 2025/lab-reports/       ← 8 Eureka Analytical Services PDFs
+│   ├── 2025/paper/             ← published paper + master chart
+│   └── 2024/                   ← 2024 paper + supplements
+├── shared/                     ← JS modules imported by both reports
+├── data/                       ← yearly dataset adapters
+└── tests/                      ← Node tests (`node --test tests/`)
+```
+
 ## 📊 Reports
 
 | Report | File | Scope |
@@ -21,26 +34,30 @@ Start here → [`index.html`](index.html) (landing page linking both reports).
 
 ## 🔬 Source data (in this repo)
 
-2025 study — 8 Eureka Analytical Services lab PDFs:
+All originals live under [`sources/`](sources/).
 
-- `Protein-content-identified-34-powders.pdf`
-- `sugar-content-and-Amino-acid-profile-of-all-powders.pdf`
-- `Taurine-content-report-all-powders.pdf`
-- `Heavy-metal-content-in-protein-powders.pdf`
-- `Fungal-toxin-content-all-powders.pdf`
-- `Pesticide-residue-reports.pdf`
-- `Steroids-and-hormones-report.pdf`
-- `Complete-scan-analysis-of-all-protein-powders.pdf`
+2025 study — 8 Eureka Analytical Services lab PDFs in [`sources/2025/lab-reports/`](sources/2025/lab-reports/):
 
-Published paper + master chart:
+- `protein-content.pdf` — protein content (all 34 powders)
+- `sugar-and-amino-acids.pdf` — sugar + amino-acid profiles
+- `taurine-content.pdf` — taurine (spiking check)
+- `heavy-metals.pdf` — heavy metals (As, Pb, Cd, Hg)
+- `fungal-toxins-aflatoxins.pdf` — aflatoxins B1/B2/G1/G2
+- `pesticide-residues.pdf` — pesticide screen (~230 molecules)
+- `steroids-hormones.pdf` — steroids / hormones
+- `complete-scan-analysis.pdf` — GC-MS full scan
+
+Published paper + master chart in [`sources/2025/paper/`](sources/2025/paper/):
 
 - `medi-104-e45970.pdf` — Philips et al., *Medicine* 2025;104:46(e45970), "The Citizens Protein Project 2"
 - `medi-104-e45970-s001.xlsx` — photographed master chart of all 34 procured packs
 
-2024 study (see `Old Project/`):
+2024 study in [`sources/2024/`](sources/2024/):
 
-- `Old Project/medi-103-e37724*.pdf/.docx/.xlsx` — Philips et al., *Medicine* 2024;103:14(e37724) + supplements
-- `Old Project/gen_report.py` — retired 12 Sep 2026 (moved to `.scratch/architecture/retired/`); the 2024 page now renders from shared modules, so the generator no longer has a template to fill
+- `paper-2024.pdf` — Philips et al., *Medicine* 2024;103:14(e37724)
+- `supplement-master-chart.pdf` — Table 1 code ↔ brand mapping
+- `supplement-methods.docx` — Kjeldahl/HPLC/ICP-MS protocols
+- `supplement-gcms-list.xlsx` — GC-MS compound list (513 compounds)
 
 ## 🧩 Code layout
 
