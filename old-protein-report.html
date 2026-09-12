@@ -21,8 +21,25 @@
 </style>
 </head>
 <body>
-<div id="shell-fallback" hidden style="max-width:1180px;margin:16px auto;padding:14px 16px;background:#fffbeb;border:1px solid #fde68a;border-radius:12px;font-size:14px">⚠️ Tables, charts and scores didn't load — browsers block data files on <code>file://</code>. Serve this folder locally (<code>python -m http.server</code>) and reopen the page.</div>
-<script>setTimeout(function(){if(!window.__shellReady){var b=document.getElementById("shell-fallback");if(b)b.hidden=false;}},1500);</script>
+<div id="shell-fallback" hidden style="max-width:1180px;margin:16px auto;padding:14px 16px;background:#fffbeb;border:1px solid #fde68a;border-radius:12px;font-size:14px">⚠️ <span id="shell-fallback-msg">Tables, charts and scores didn't load — browsers block data files on <code>file://</code>. Serve this folder locally (<code>python -m http.server</code>) and reopen the page.</span></div>
+<script>
+window.__shellError = null;
+window.addEventListener("error", function (e) {
+  if (!window.__shellReady && e && e.message) window.__shellError = e.message;
+}, true);
+setTimeout(function () {
+  if (window.__shellReady) return;
+  var b = document.getElementById("shell-fallback");
+  if (!b) return;
+  if (location.protocol !== "file:") {
+    var m = document.getElementById("shell-fallback-msg");
+    if (m) m.textContent = "Tables, charts and scores didn't load on this page."
+      + (window.__shellError ? " First error: " + window.__shellError : " The data modules failed to run.")
+      + " Try a hard refresh (Ctrl+Shift+R). If it persists, please report this text.";
+  }
+  b.hidden = false;
+}, 1500);
+</script>
 <div class="topbar"><div class="wrap"><a href="index.html">Citizen Protein Project</a> — independent lab visualisations</div></div>
 <div id="shell-hero"></div>
 <div id="shell-tabs"></div>
