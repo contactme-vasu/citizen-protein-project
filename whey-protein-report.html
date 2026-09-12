@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whey Protein Lab Report — Interactive Analysis (Concentrate &amp; Blends Only)</title>
+<style>
+  :root{
+    --bg:#0f172a; --bg2:#1e293b; --card:#ffffff; --muted:#64748b;
+    --accent:#16a34a; --accent2:#0ea5e9; --warn:#d97706; --bad:#dc2626;
+    --ink:#0f172a; --line:#e2e8f0;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:#f1f5f9;color:var(--ink)}
+  header.hero{background:linear-gradient(135deg,#052e16,#166534 55%,#0ea5e9);color:#fff;padding:40px 24px 32px}
+  header.hero .wrap, main.wrap{max-width:1150px;margin:0 auto}
+  header.hero h1{margin:0 0 8px;font-size:clamp(24px,4vw,38px)}
+  header.hero p{margin:6px 0;opacity:.94}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .badge{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:6px 12px;border-radius:999px;font-size:13px}
+  nav.tabs{position:sticky;top:0;z-index:50;background:var(--bg);display:flex;gap:4px;overflow-x:auto;padding:8px 12px}
+  nav.tabs a{color:#cbd5e1;text-decoration:none;padding:10px 14px;border-radius:8px;white-space:nowrap;font-size:14px}
+  nav.tabs a:hover,nav.tabs a.active{background:#334155;color:#fff}
+  section{padding:28px 24px}
+  section .wrap{max-width:1150px;margin:0 auto}
+  h2{font-size:24px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 2px 10px rgba(15,23,42,.05);margin-bottom:18px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr}}
+  .verdict{border-left:8px solid var(--accent)}
+  .verdict .rank{font-size:15px;font-weight:700;color:var(--accent)}
+  .verdict h3{margin:4px 0;font-size:22px}
+  .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700}
+  .ok{background:#dcfce7;color:#166534}.warnx{background:#fef3c7;color:#92400e}.badx{background:#fee2e2;color:#991b1b}.info{background:#e0f2fe;color:#075985}.grey{background:#f1f5f9;color:#475569}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{background:#f8fafc;cursor:pointer;user-select:none;white-space:nowrap}
+  th:hover{color:var(--accent2)}
+  tr:hover td{background:#f8fafc}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;align-items:center}
+  .controls select,.controls input[type=text]{padding:9px 12px;border:1px solid var(--line);border-radius:9px;font-size:14px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .bar-row{display:grid;grid-template-columns:210px 1fr 70px;gap:10px;align-items:center;margin:7px 0;font-size:14px}
+  .bar-track{background:#eef2f7;border-radius:8px;height:22px;position:relative;overflow:hidden}
+  .bar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent),#4ade80);transition:width .5s}
+  .bar-fill.blue{background:linear-gradient(90deg,#0284c7,#38bdf8)}
+  .bar-fill.amber{background:linear-gradient(90deg,#b45309,#fbbf24)}
+  .bar-fill.red{background:linear-gradient(90deg,#b91c1c,#f87171)}
+  .detail-btn{background:var(--accent2);color:#fff;border:none;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}
+  .detail-btn:hover{filter:brightness(.92)}
+  #modal{position:fixed;inset:0;background:rgba(2,6,23,.6);display:none;align-items:flex-start;justify-content:center;padding:30px 16px;z-index:100;overflow-y:auto}
+  #modal.open{display:flex}
+  #modal .box{background:#fff;border-radius:16px;max-width:860px;width:100%;padding:26px;position:relative}
+  #modal .x{position:absolute;top:12px;right:14px;border:none;background:#f1f5f9;border-radius:8px;font-size:18px;cursor:pointer;padding:4px 10px}
+  input[type=range]{width:150px;accent-color:var(--accent)}
+  .score-row{display:flex;align-items:center;gap:12px;margin:8px 0;font-size:14px;flex-wrap:wrap}
+  .score-row label{width:170px;font-weight:600}
+  footer{background:var(--bg);color:#94a3b8;padding:26px 24px;font-size:13px}
+  footer .wrap{max-width:1150px;margin:0 auto}
+  .note{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;font-size:14px}
+  .kpi{display:flex;gap:14px;flex-wrap:wrap}
+  .kpi .k{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px 16px;min-width:150px}
+  .kpi .k b{font-size:22px;display:block}
+  ul.tight li{margin:5px 0}
+  code{background:#f1f5f9;padding:2px 6px;border-radius:6px;font-size:13px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>🥛 Whey Protein — Interactive Lab Analysis</h1>
+    <p>Compiled from <b>8 Eureka Analytical Services lab reports</b> (MESH / Citizen Protein Project, sampled 27–28 Jun 2025, tested early Jul 2025). This page covers <b>whey proteins only</b> — <b>isolate-only products excluded</b> as requested; concentrate-only + concentrate/isolate blends included.</p>
+    <div class="badges">
+      <span class="badge">8 whey products analysed</span>
+      <span class="badge">8 test panels: protein • sugar • amino acids • taurine • heavy metals • aflatoxins • pesticides • steroids</span>
+      <span class="badge">34 powders tested in total; non-whey hidden</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <a href="#verdict" class="active">🏆 Verdict</a>
+  <a href="#compare">📊 Compare</a>
+  <a href="#charts">📈 Charts</a>
+  <a href="#safety">🛡️ Safety</a>
+  <a href="#amino">🧬 Amino acids</a>
+  <a href="#score">⚖️ My Score</a>
+  <a href="#method">🔬 Method &amp; Scope</a>
+  <a href="#paper">📄 Published paper</a>
+</nav>
+
+<main>
+<!-- ============ VERDICT ============ -->
+<section id="verdict"><div class="wrap">
+  <h2>🏆 Verdict — which whey should you consume?</h2>
+  <p class="sub">Based strictly on the lab numbers below (protein density + muscle-building amino acids + cleanliness). Click any product in the Compare table for its full dossier.</p>
+
+  <div class="card verdict">
+    <div class="rank">🥇 BEST OVERALL</div>
+    <h3>S16 — The Whole Truth, Whey Concentrate</h3>
+    <p><span class="pill ok">78.24 g protein / 100 g</span> <span class="pill ok">Highest BCAA 16.90 g</span> <span class="pill ok">Highest leucine 8.49 g</span> <span class="pill ok">Zero sucrose</span> <span class="pill ok">All safety panels clean</span></p>
+    <p>Why it wins: among the 9 eligible wheys it has the <b>densest essential-amino profile</b> — leucine (the trigger for muscle-protein synthesis), total BCAAs, lysine and most other aminos are all #1. Protein is 2nd-highest (78.24 g/100 g), sugar is zero, and every safety test is clean: heavy metals BLQ, aflatoxins BLQ, pesticides only a trace of copper (0.869 mg/kg), all four steroid/hormone markers BLQ.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="rank" style="color:#0284c7;font-weight:700">🥈 RUNNER-UP</div>
+      <h3 style="margin:4px 0">S32 — MN Whey Concentrate</h3>
+      <p><span class="pill info">80.22 g protein / 100 g (highest)</span> <span class="pill ok">BCAA 15.86 g</span> <span class="pill ok">All safety clean</span></p>
+      <p>Highest measured protein of the group with the 2nd-best amino profile and very low copper (0.829 mg/kg). Pick this if you want <b>maximum protein per scoop</b>; pick S16 if you want <b>maximum leucine/BCAA per scoop</b>. Practically, the two are very close.</p>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;color:#b45309">🥉 BEST BUDGET-CLEAN PICK</div>
+      <h3 style="margin:4px 0">S33 — Phab Whey</h3>
+      <p><span class="pill info">76.08 g protein</span> <span class="pill ok">Lowest copper 0.531 mg/kg</span> <span class="pill ok">All safety clean</span></p>
+      <p>The <b>cleanest pesticide screen</b> in the whey set and solid protein. Amino profile slightly behind S16/S32 but very respectable.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">⚠️ Which ones to avoid / treat with caution</h3>
+    <ul class="tight">
+      <li><b>S10 — Jan Aushadhi Whey:</b> only whey with detectable <b>cadmium (0.031 mg/kg)</b> + highest added sugar (<b>sucrose 4.83 g/100 g</b>). Lowest value-for-money on both nutrition and purity. <span class="pill badx">Avoid</span></li>
+      <li><b>S2 — BYBV Concentrate:</b> lowest protein in the group (<b>57.16 g/100 g</b>), highest copper (4.40 mg/kg), and <b>no steroid test was run</b> for it — incomplete safety picture. <span class="pill warnx">Caution</span></li>
+      <li><b>S11, S31, S34</b> are all clean and acceptable mid-field choices; S11 (Nakpro Gold) has modestly lower BCAAs, S34/MAXN and S31/Trunativ sit in the middle on protein.</li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- ============ COMPARE ============ -->
+<section id="compare" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <h2>📊 Head-to-head comparison</h2>
+  <p class="sub">Click a column header to sort. Use the filter to show only fully-clean products. Click “Details” for the full dossier of any product.</p>
+  <div class="controls">
+    <input type="text" id="q" placeholder="🔍 Search product…" oninput="renderTable()">
+    <button class="chip on" id="cAll" onclick="setFilter('all')">All 8</button>
+    <button class="chip" id="cClean" onclick="setFilter('clean')">Fully clean only</button>
+    <button class="chip" id="cNoSugar" onclick="setFilter('nosugar')">Zero sucrose</button>
+  </div>
+  <div class="card" style="overflow-x:auto;padding:8px">
+    <table id="tbl"><thead><tr>
+      <th onclick="sortBy('brand')">Product ▾</th>
+      <th onclick="sortBy('protein')">Protein g/100g</th>
+      <th onclick="sortBy('bcaa')">BCAA g/100g</th>
+      <th onclick="sortBy('leu')">Leucine</th>
+      <th onclick="sortBy('suc')">Sucrose</th>
+      <th onclick="sortBy('cu')">Copper* mg/kg</th>
+      <th>Safety flags</th>
+      <th></th>
+    </tr></thead><tbody id="rows"></tbody></table>
+  </div>
+  <p style="font-size:13px;color:var(--muted)">* Copper = elemental copper (the four "copper salt" rows in the pesticide report are the same copper expressed four ways). All ~230 other pesticides were BLQ in every sample.</p>
+</div></section>
+
+<!-- ============ CHARTS ============ -->
+<section id="charts"><div class="wrap">
+  <h2>📈 Visual charts</h2>
+  <p class="sub">Pick a metric — bars re-draw instantly. Higher is better, except sucrose &amp; copper (lower is better).</p>
+  <div class="card">
+    <div class="controls" id="metricBtns">
+      <button class="chip on" data-m="protein">Protein</button>
+      <button class="chip" data-m="bcaa">BCAA</button>
+      <button class="chip" data-m="leu">Leucine</button>
+      <button class="chip" data-m="lys">Lysine</button>
+      <button class="chip" data-m="suc">Sucrose (lower✔)</button>
+      <button class="chip" data-m="cu">Copper (lower✔)</button>
+    </div>
+    <div id="chart"></div>
+  </div>
+</div></section>
+
+<!-- ============ SAFETY ============ -->
+<section id="safety" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <h2>🛡️ Safety matrix (all 8 included wheys)</h2>
+  <p class="sub">BLQ = Below Limit of Quantification (i.e. not detected). Green = clean, red/amber = detected.</p>
+  <div class="grid3">
+    <div class="card"><h3 style="margin-top:0">Heavy metals (As, Pb, Cd, Hg)</h3>
+      <p>✅ All BLQ for 7 of 8 products.<br>🔴 <b>S10 Jan Aushadhi:</b> Cadmium <b>0.031 mg/kg</b> (LOQ 0.01). Others BLQ.</p>
+      <p style="font-size:13px;color:var(--muted)">Context: FSSAI limit for lead in protein powders is typically 0.5 mg/kg; all samples are well clear on Pb. Any cadmium detection is, however, a negative differentiator.</p></div>
+    <div class="card"><h3 style="margin-top:0">Aflatoxins (B1/B2/G1/G2)</h3>
+      <p>✅ <b>All 8 wheys BLQ</b> (LOQ 0.5 µg/kg) — no fungal-toxin concern in any included product.</p></div>
+    <div class="card"><h3 style="margin-top:0">Steroids / hormones</h3>
+      <p>✅ <b>All BLQ for all 7 tested products</b> (estradiol, medroxyprogesterone, progesterone, methyltestosterone).<br>⚪ <b>S2 BYBV:</b> not covered in the steroid report — no data.<br>ℹ️ The single progesterone detection in the nutraceutical group (Naturaltein, 0.00362 mg/kg) belongs to an isolate-only product, excluded from this page — see Method.</p></div>
+  </div>
+  <div class="card"><h3 style="margin-top:0">Pesticides — elemental copper (mg/kg) + everything else</h3>
+    <p>Every product showed only copper above LOQ; all other ~230 molecules (organophosphates, pyrethroids, glyphosate, etc.) were <b>BLQ in all samples</b>. Lower copper = cleaner:</p>
+    <div id="cuChart"></div>
+    <p style="font-size:13px;color:var(--muted)">Note: copper is an essential trace element and can also come from mineral premixes/equipment; treat it as a relative cleanliness signal, not a poisoning verdict. S15/S17/S24 (excluded isolates) were the only fully-BLQ samples in the whole 34-powder set.</p></div>
+  <div class="card"><h3 style="margin-top:0">Sugar &amp; taurine</h3>
+    <p>✅ Sucrose <b>zero</b> in 7 of 8 (all except S10 at 4.83 g/100 g). Fructose BLQ everywhere. Taurine BLQ everywhere except <b>S2 (5.93 mg/100 g)</b> — negligible either way (a cup of coffee-scale irrelevance; taurine is not a quality marker here).</p></div>
+</div></section>
+
+<!-- ============ AMINO ============ -->
+<section id="amino"><div class="wrap">
+  <h2>🧬 Amino-acid profiles (g / 100 g powder)</h2>
+  <p class="sub">Full 19-amino-acid lab profile per product. BCAAs = isoleucine + leucine + valine. Hydroxyproline BLQ everywhere (good — no gelatin/collagen spiking signal).</p>
+  <div class="controls"><select id="aaPick" onchange="renderAmino()"></select></div>
+  <div class="card"><div class="kpi" id="aaKpi"></div></div>
+  <div class="card" style="overflow-x:auto"><table id="aaTbl"></table></div>
+</div></section>
+
+<!-- ============ SCORE ============ -->
+<section id="score" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <h2>⚖️ Build your own score</h2>
+  <p class="sub">Drag the weights — the ranking recalculates live. Default: protein 35 • amino quality (BCAA) 30 • purity (zero sugar) 10 • safety 25.</p>
+  <div class="card">
+    <div class="score-row"><label>Protein content <b id="wPv">35</b></label><input type="range" id="wP" min="0" max="60" value="35" oninput="rescore()"></div>
+    <div class="score-row"><label>Amino quality (BCAA) <b id="wAv">30</b></label><input type="range" id="wA" min="0" max="60" value="30" oninput="rescore()"></div>
+    <div class="score-row"><label>Purity (zero sugar) <b id="wSv">10</b></label><input type="range" id="wS" min="0" max="40" value="10" oninput="rescore()"></div>
+    <div class="score-row"><label>Safety record <b id="wFv">25</b></label><input type="range" id="wF" min="0" max="60" value="25" oninput="rescore()"></div>
+    <div id="scoreOut" style="margin-top:14px"></div>
+  </div>
+</div></section>
+
+<!-- ============ METHOD ============ -->
+<section id="method"><div class="wrap">
+  <h2>🔬 Method, scope &amp; exclusions</h2>
+  <div class="grid2">
+  <div class="card"><h3 style="margin-top:0">What was included</h3>
+    <ul class="tight">
+      <li><b>S2</b> BYBV Concentrate (whey concentrate per label)</li>
+      <li><b>S10</b> Jan Aushadhi Whey Concentrate (blend of concentrate + isolate + hydrolysate per label photo)</li>
+      <li><b>S11</b> Nakpro Gold (whey blend — concentrate + isolate)</li>
+      <li><b>S16</b> The Whole Truth Concentrate ✔ concentrate-only</li>
+      <li><b>S31</b> TruNativ Whey (whey, no isolate-only claim)</li>
+      <li><b>S32</b> Muscle Nectar (MN) Raw Whey, unflavoured ✔ concentrate-only (MRP ₹1399, batch MNWPCUF-25051)</li>
+      <li><b>S33</b> Phab Whey (whey, no isolate-only claim)</li>
+      <li><b>S34</b> MAXN Whey (whey, no isolate-only claim)</li>
+    </ul></div>
+  <div class="card"><h3 style="margin-top:0">What was excluded (isolate-only)</h3>
+    <ul class="tight">
+      <li><b>S12</b> Nakpro Platinum (isolate line)</li>
+      <li><b>S17</b> Whole Truth Isolate</li>
+      <li><b>S22</b> TrueBasics Whey Isolate</li>
+      <li><b>S23</b> Impact Whey Isolate</li>
+      <li><b>S24</b> As-It-Is Whey Isolate</li>
+      <li><b>S29</b> Avvatar Whey Isolate</li>
+      <li><b>S30</b> IsoPure Whey (100% isolate product)</li>
+      <li><b>S21</b> Naturaltein — pack front says “Isolate”, ingredients: whey protein isolate 89% → isolate-only</li>
+      <li><b>S35</b> Super You — only taurine tested, no protein/amino/safety data → cannot rank</li>
+      <li>All non-whey powders (S1, S3–S9, S13–S15, S18–S20, S25–S28) — out of scope for a whey question</li>
+    </ul></div>
+  </div>
+  <div class="note"><b>Limitations &amp; honesty notes:</b> (1) Isolate-vs-blend classification was verified against the study's photographed master chart of procured packs (supplementary file medi-104-e45970-s001): S21 was moved to <i>excluded</i> after its label photo showed whey isolate 89%; S10 confirmed as a concentrate-led blend; S32 identified as Muscle Nectar Raw Whey Concentrate (Unflavoured). (2) Protein is by IS 7219:1973 (Kjeldahl nitrogen) — it measures nitrogen, so amino profiles were used as a cross-check against spiking. (3) GC-MS "complete scan" pages state "As Attached Below" with no quantified hits disclosed — no anomalies could be extracted. (4) One batch per brand was tested; batch-to-batch variation is real. This is a lab-data summary, not medical advice.</div>
+  <div class="card" style="margin-top:16px"><h3 style="margin-top:0">Source files used</h3>
+    <p style="font-size:14px"><code>Protein-content-identified-34-powders.pdf</code> • <code>sugar-content-and-Amino-acid-profile-of-all-powders.pdf</code> • <code>Taurine-content-report-all-powders.pdf</code> • <code>Heavy-metal-content-in-protein-powders.pdf</code> • <code>Fungal-toxin-content-all-powders.pdf</code> • <code>Pesticide-residue-reports.pdf</code> • <code>Steroids-and-hormones-report.pdf</code> • <code>Complete-scan-analysis-of-all-protein-powders.pdf</code><br>Eureka Analytical Services Pvt Ltd, for MESH — sampling 27–28 Jun 2025, Aluva / Rajagiri Hospital.</p></div>
+</div></section>
+
+<!-- ============ PAPER ============ -->
+<section id="paper"><div class="wrap">
+  <h2>📄 The published paper behind this data</h2>
+  <p class="sub">medi-104-e45970.pdf — the peer-reviewed write-up of this exact study; medi-104-e45970-s001.xlsx — its photographed master chart of all 34 procured packs.</p>
+  <div class="card">
+    <h3 style="margin-top:0">Philips et al., <i>Medicine</i> 2025;104:46(e45970) — “The Citizens Protein Project 2”</h3>
+    <p>India's first publicly crowd-funded study of whey supplements (MESH, Rajagiri Hospital; funded via meshindia.org donations): <b>34 whey powders — 18 medical-pharmaceutical vs 16 nutraceutical</b> — tested for protein, amino acids, sugars, heavy metals, aflatoxins, hormones, pesticides and undeclared additives.</p>
+    <ul class="tight">
+      <li><b>Nutraceuticals averaged 75.6 ± 7.3 g protein/100 g</b> with mean label bias of only −2.7%; pharmaceuticals averaged <b>29.1 ± 15.4 g</b>, with <b>83% mislabelled</b> beyond ±5%.</li>
+      <li><b>Six nutraceutical powders met the “very-high-quality” bar</b> (≥40 g EAA + ≥7 g leucine per 100 g) — no pharmaceutical product came close.</li>
+      <li><b>Cost per gram of actual protein: ₹2.19–8.79 (nutra) vs ₹6.71–24.77 (pharma)</b> — pharma premiums are disconnected from protein delivered.</li>
+      <li>Taurine-based nitrogen spiking signals in <b>89% of pharma vs 12.5% of nutra</b> products (S2 at 5.93 and the excluded isolate S29 at 87.1 mg/100 g were the two nutra detections).</li>
+      <li>Aflatoxin in 2 pharma powders (B-Protein, D-Protin); progesterone in 2 pharma + 1 nutra (Naturaltein — the isolate-only S21 excluded above).</li>
+    </ul>
+    <p style="font-size:14px">Bottom line of the paper, in one sentence: <b>nutraceutical whey concentrates/blends deliver more protein, better amino profiles and cleaner labels per rupee than “doctor-recommended” pharmaceutical powders</b> — which is exactly what this page's product ranking shows.</p>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">What the supplementary master chart confirmed</h3>
+    <ul class="tight">
+      <li><b>MN = Muscle Nectar</b> — S32's pack photo reads “Raw Whey (Unflavoured)” by <b>Muscle Nectar</b>, batch MNWPCUF-25051, MRP ₹1399 (₹3.49/g).</li>
+      <li><b>S10 = Jan Aushadhi Whey Concentrate</b> — ingredients list concentrate + isolate + hydrolysate, so it stays included as a blend.</li>
+      <li><b>S21 = NaturalTein Isolate</b> (chocolate) — whey protein isolate 89% → excluded as isolate-only, which also removes the page's only progesterone flag.</li>
+    </ul>
+  </div>
+</div></section>
+</main>
+
+<div id="modal"><div class="box"><button class="x" onclick="closeModal()">✕</button><div id="modalBody"></div></div></div>
+
+<footer><div class="wrap">Interactive report generated from the 8 Eureka/MESH lab PDFs. Values transcribed as measured; BLQ = below limit of quantification. For personal health decisions, consult a qualified professional. — Sept 2025 data.</div></footer>
+
+<script>
+const AAS=["Aspartic acid","Glutamic acid","Serine","Histidine","Glycine","Threonine","Arginine","Alanine","Tyrosine","Cysteine","Valine","Methionine","Tryptophan","Phenylalanine","Isoleucine","Leucine","Lysine","Proline"];
+const P=[
+ {s:"S2", brand:"BYBV Concentrate", type:"Concentrate (per label)", protein:57.16, suc:0, tau:5.93, cu:4.400, hm:"All BLQ", afl:"All BLQ", st:"Not tested", flags:["Lowest protein","Highest copper","No steroid data"],
+  aa:{"Aspartic acid":6.71,"Glutamic acid":11.36,"Serine":3.26,"Histidine":1.65,"Glycine":1.07,"Threonine":4.24,"Arginine":1.78,"Alanine":3.13,"Tyrosine":2.15,"Cysteine":1.39,"Valine":3.05,"Methionine":1.53,"Tryptophan":0.48,"Phenylalanine":2.31,"Isoleucine":3.19,"Leucine":5.72,"Lysine":6.89,"Proline":5.90}},
+ {s:"S10", brand:"Jan Aushadhi Whey Concentrate", type:"Whey (blend / unspecified)", protein:68.52, suc:4.83, tau:0, cu:2.401, hm:"Cd 0.031 ⚠", afl:"All BLQ", st:"All BLQ", flags:["Cadmium detected","Sucrose 4.83g"],
+  aa:{"Aspartic acid":8.28,"Glutamic acid":12.86,"Serine":3.98,"Histidine":1.6,"Glycine":1.28,"Threonine":5.01,"Arginine":1.92,"Alanine":4.16,"Tyrosine":2.1,"Cysteine":1.86,"Valine":3.29,"Methionine":1.81,"Tryptophan":0.83,"Phenylalanine":2.38,"Isoleucine":3.73,"Leucine":7.53,"Lysine":7.97,"Proline":5.52}},
+ {s:"S11", brand:"Nakpro Gold (Whey)", type:"Blend (conc. + isolate)", protein:67.53, suc:0, tau:0, cu:0.682, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:[],
+  aa:{"Aspartic acid":7.80,"Glutamic acid":13.02,"Serine":3.88,"Histidine":1.64,"Glycine":1.24,"Threonine":4.64,"Arginine":1.87,"Alanine":3.87,"Tyrosine":2.18,"Cysteine":1.66,"Valine":3.24,"Methionine":1.82,"Tryptophan":0.89,"Phenylalanine":2.48,"Isoleucine":3.48,"Leucine":5.91,"Lysine":9.06,"Proline":5.72}},
+ {s:"S16", brand:"The Whole Truth Concentrate", type:"Concentrate-only ✔", protein:78.24, suc:0, tau:0, cu:0.869, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:["Top BCAA","Top leucine"],
+  aa:{"Aspartic acid":9.39,"Glutamic acid":15.37,"Serine":4.62,"Histidine":1.79,"Glycine":1.49,"Threonine":5.73,"Arginine":2.15,"Alanine":4.62,"Tyrosine":2.55,"Cysteine":2.07,"Valine":3.99,"Methionine":2.06,"Tryptophan":0.88,"Phenylalanine":2.82,"Isoleucine":4.42,"Leucine":8.49,"Lysine":9.69,"Proline":6.43}},
+ {s:"S31", brand:"TruNativ Whey", type:"Whey (blend / unspecified)", protein:74.24, suc:0, tau:0, cu:1.387, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:[],
+  aa:{"Aspartic acid":8.54,"Glutamic acid":13.64,"Serine":4.09,"Histidine":1.56,"Glycine":1.36,"Threonine":5.05,"Arginine":2.04,"Alanine":4.15,"Tyrosine":2.34,"Cysteine":1.89,"Valine":3.60,"Methionine":1.89,"Tryptophan":0.65,"Phenylalanine":2.53,"Isoleucine":3.96,"Leucine":6.78,"Lysine":9.37,"Proline":6.12}},
+ {s:"S32", brand:"Muscle Nectar (MN) Raw Whey", type:"Concentrate-only, unflavoured ✔", protein:80.22, suc:0, tau:0, cu:0.829, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:["Top protein"],
+  aa:{"Aspartic acid":8.98,"Glutamic acid":14.23,"Serine":4.26,"Histidine":1.63,"Glycine":1.39,"Threonine":5.50,"Arginine":2.11,"Alanine":4.46,"Tyrosine":2.41,"Cysteine":1.97,"Valine":3.78,"Methionine":2.02,"Tryptophan":0.71,"Phenylalanine":2.57,"Isoleucine":4.32,"Leucine":7.76,"Lysine":9.81,"Proline":6.69}},
+ {s:"S33", brand:"Phab Whey", type:"Whey (blend / unspecified)", protein:76.08, suc:0, tau:0, cu:0.531, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:["Lowest copper"],
+  aa:{"Aspartic acid":8.81,"Glutamic acid":13.76,"Serine":3.97,"Histidine":1.48,"Glycine":1.31,"Threonine":5.28,"Arginine":1.76,"Alanine":4.31,"Tyrosine":2.21,"Cysteine":1.99,"Valine":3.50,"Methionine":1.86,"Tryptophan":0.67,"Phenylalanine":2.33,"Isoleucine":4.08,"Leucine":7.14,"Lysine":9.10,"Proline":6.08}},
+ {s:"S34", brand:"MAXN Whey", type:"Whey (blend / unspecified)", protein:73.07, suc:0, tau:0, cu:0.929, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:[],
+  aa:{"Aspartic acid":8.52,"Glutamic acid":13.47,"Serine":4.04,"Histidine":1.47,"Glycine":1.37,"Threonine":5.06,"Arginine":1.89,"Alanine":4.18,"Tyrosine":2.17,"Cysteine":1.90,"Valine":3.38,"Methionine":1.86,"Tryptophan":0.68,"Phenylalanine":2.48,"Isoleucine":3.78,"Leucine":7.59,"Lysine":8.55,"Proline":6.22}},
+];
+P.forEach(p=>{p.bcaa=+(p.aa.Isoleucine+p.aa.Leucine+p.aa.Valine).toFixed(2);p.leu=p.aa.Leucine;p.lys=p.aa.Lysine;
+  p.clean = (p.hm==="All BLQ"&&p.afl==="All BLQ"&&(p.st==="All BLQ")&&p.suc===0);});
+let sortK="protein", sortD=-1, filter="all", metric="protein";
+
+function setFilter(f){filter=f;["cAll","cClean","cNoSugar"].forEach(id=>document.getElementById(id).classList.remove("on"));
+  document.getElementById(f==="all"?"cAll":f==="clean"?"cClean":"cNoSugar").classList.add("on");renderTable();}
+function sortBy(k){if(sortK===k)sortD*=-1;else{sortK=k;sortD=k==="brand"?1:-1;}renderTable();}
+function rows(){
+  let q=(document.getElementById("q").value||"").toLowerCase();
+  let r=P.filter(p=>(p.brand+p.s).toLowerCase().includes(q));
+  if(filter==="clean")r=r.filter(p=>p.clean);
+  if(filter==="nosugar")r=r.filter(p=>p.suc===0);
+  r.sort((a,b)=>{let x=a[sortK],y=b[sortK];if(typeof x==="string")return sortD*x.localeCompare(y);return sortD*(x-y);});
+  return r;
+}
+function flagHtml(p){
+  if(!p.flags.length)return '<span class="pill ok">Clean</span>';
+  return p.flags.map(f=>`<span class="pill ${/Cadmium|Lowest protein/.test(f)?"badx":"warnx"}">${f}</span>`).join(" ");
+}
+function renderTable(){
+  document.getElementById("rows").innerHTML=rows().map(p=>`<tr>
+    <td><b>${p.s}</b> — ${p.brand}<br><span style="font-size:12px;color:var(--muted)">${p.type}</span></td>
+    <td><b>${p.protein}</b></td><td>${p.bcaa}</td><td>${p.leu}</td>
+    <td>${p.suc===0?'<span class="pill ok">0</span>':'<span class="pill badx">'+p.suc+'</span>'}</td>
+    <td>${p.cu}</td><td>${flagHtml(p)}</td>
+    <td><button class="detail-btn" onclick="openModal('${p.s}')">Details</button></td></tr>`).join("");
+}
+const META={protein:{label:"Protein (g/100 g)",max:85,cls:"",lo:false},bcaa:{label:"Total BCAA (g/100 g)",max:17.5,cls:"blue",lo:false},
+ leu:{label:"Leucine (g/100 g)",max:9,cls:"blue",lo:false},lys:{label:"Lysine (g/100 g)",max:10.5,cls:"blue",lo:false},
+ suc:{label:"Sucrose (g/100 g) — lower is better",max:5,cls:"red",lo:true},cu:{label:"Copper (mg/kg) — lower is better",max:4.6,cls:"amber",lo:true}};
+function renderChart(){
+  const m=META[metric];
+  const arr=[...P].sort((a,b)=>m.lo?(a[metric]-b[metric]):(b[metric]-a[metric]));
+  document.getElementById("chart").innerHTML=arr.map(p=>{
+    const v=p[metric], w=Math.max(2,100*v/m.max);
+    return `<div class="bar-row"><div><b>${p.s}</b> ${p.brand}</div>
+      <div class="bar-track"><div class="bar-fill ${m.cls}" style="width:${w}%"></div></div><div><b>${v}</b></div></div>`;}).join("");
+}
+document.getElementById("metricBtns").addEventListener("click",e=>{
+  if(e.target.dataset.m){metric=e.target.dataset.m;
+    document.querySelectorAll("#metricBtns .chip").forEach(c=>c.classList.remove("on"));e.target.classList.add("on");renderChart();}});
+function renderCu(){
+  const arr=[...P].sort((a,b)=>a.cu-b.cu);
+  document.getElementById("cuChart").innerHTML=arr.map(p=>
+    `<div class="bar-row"><div><b>${p.s}</b> ${p.brand}</div>
+     <div class="bar-track"><div class="bar-fill amber" style="width:${Math.max(3,100*p.cu/4.6)}%"></div></div><div><b>${p.cu}</b></div></div>`).join("");
+}
+function openModal(s){
+  const p=P.find(x=>x.s===s);
+  const aaRows=AAS.map(a=>`<tr><td>${a}</td><td><b>${p.aa[a]}</b></td></tr>`).join("");
+  document.getElementById("modalBody").innerHTML=`
+    <h2 style="margin-top:0">${p.s} — ${p.brand}</h2>
+    <p style="color:var(--muted)">${p.type} • Protein <b>${p.protein} g/100 g</b> • BCAA <b>${p.bcaa} g</b> • Sucrose <b>${p.suc} g</b></p>
+    <div class="kpi">
+      <div class="k">Protein<b>${p.protein}</b>g/100g</div><div class="k">BCAA<b>${p.bcaa}</b>g/100g</div>
+      <div class="k">Leucine<b>${p.leu}</b>g</div><div class="k">Copper<b>${p.cu}</b>mg/kg</div>
+    </div>
+    <h3>Safety</h3>
+    <table><tr><th>Panel</th><th>Result</th></tr>
+    <tr><td>Heavy metals</td><td>${p.hm}</td></tr><tr><td>Aflatoxins</td><td>${p.afl}</td></tr>
+    <tr><td>Pesticides</td><td>Copper ${p.cu} mg/kg; all other ~230 molecules BLQ</td></tr>
+    <tr><td>Steroids/hormones</td><td>${p.st}</td></tr>
+    <tr><td>Taurine</td><td>${p.tau===0?"BLQ":p.tau+" mg/100 g"}</td></tr></table>
+    <h3>Amino-acid profile (g/100 g)</h3>
+    <table><tr><th>Amino acid</th><th>g/100 g</th></tr>${aaRows}</table>
+    <p style="font-size:13px;color:var(--muted)">Hydroxyproline BLQ in all samples (no gelatin-spiking signal). Fructose BLQ in all samples.</p>`;
+  document.getElementById("modal").classList.add("open");
+}
+function closeModal(){document.getElementById("modal").classList.remove("open");}
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal();});
+function renderAmino(){
+  const sel=document.getElementById("aaPick");
+  if(!sel.options.length)sel.innerHTML=P.map(p=>`<option value="${p.s}">${p.s} — ${p.brand}</option>`).join("");
+  const p=P.find(x=>x.s===sel.value)||P[3];
+  sel.value=p.s;
+  document.getElementById("aaKpi").innerHTML=
+    `<div class="k">Protein<b>${p.protein}</b></div><div class="k">BCAA<b>${p.bcaa}</b></div>
+     <div class="k">Leucine<b>${p.leu}</b></div><div class="k">Lysine<b>${p.lys}</b></div>`;
+  document.getElementById("aaTbl").innerHTML=`<tr><th>Amino acid</th>${P.map(x=>`<th>${x.s}</th>`).join("")}</tr>`+
+    AAS.map(a=>{const vals=P.map(x=>x.aa[a]);const mx=Math.max(...vals);
+      return `<tr><td>${a}</td>${vals.map(v=>`<td ${v===mx?"style='background:#dcfce7;font-weight:700'":""}>${v}</td>`).join("")}</tr>`;}).join("")+
+    `<tr><td><b>BCAA total</b></td>${P.map(x=>`<td><b>${x.bcaa}</b></td>`).join("")}</tr>`;
+}
+function rescore(){
+  const wP=+document.getElementById("wP").value,wA=+document.getElementById("wA").value,
+        wS=+document.getElementById("wS").value,wF=+document.getElementById("wF").value;
+  document.getElementById("wPv").textContent=wP;document.getElementById("wAv").textContent=wA;
+  document.getElementById("wSv").textContent=wS;document.getElementById("wFv").textContent=wF;
+  const tot=(wP+wA+wS+wF)||1;
+  const sc=P.map(p=>{
+    const prot=p.protein/85, bcaa=p.bcaa/17.5, pure=p.suc===0?1:Math.max(0,1-p.suc/5);
+    let safe=1; if(/Cadmium|Lowest protein/.test(p.flags.join()))safe-=0.45;
+    if(/Progesterone/.test(p.flags.join()))safe-=0.25;
+    if(/No steroid/.test(p.flags.join()))safe-=0.20;
+    safe-=Math.min(0.25,p.cu/4.6*0.25); safe=Math.max(0,safe);
+    const s=100*(wP*prot+wA*bcaa+wS*pure+wF*safe)/tot;
+    return {...p,score:+s.toFixed(1)};}).sort((a,b)=>b.score-a.score);
+  document.getElementById("scoreOut").innerHTML=sc.map((p,i)=>
+    `<div class="bar-row"><div>${i===0?"🥇 ":i===1?"🥈 ":i===2?"🥉 ":("#"+(i+1)+" ")}<b>${p.s}</b> ${p.brand}</div>
+     <div class="bar-track"><div class="bar-fill ${i===0?"":"blue"}" style="width:${p.score}%"></div></div><div><b>${p.score}</b></div></div>`).join("");
+}
+document.querySelectorAll('nav.tabs a').forEach(a=>a.addEventListener("click",()=>{
+  document.querySelectorAll('nav.tabs a').forEach(x=>x.classList.remove("active"));a.classList.add("active");}));
+renderTable();renderChart();renderCu();renderAmino();rescore();
+</script>
+</body>
+</html>

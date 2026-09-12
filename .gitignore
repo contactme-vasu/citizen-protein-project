@@ -1,0 +1,25 @@
+# Agent / harness files — not part of the public site
+.agents/
+.scratch/
+skills-lock.json
+AGENTS.md
+
+# Docs for agents only (internal workflow, not public content)
+docs/agents/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Keep everything else (reports, PDFs, data) tracked

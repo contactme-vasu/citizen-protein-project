@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Citizens Protein Project (2024) — Interactive Report: 36 Protein Powders</title>
+<style>
+  :root{--bg:#0f172a;--card:#ffffff;--muted:#64748b;--accent:#16a34a;--accent2:#0ea5e9;--ink:#0f172a;--line:#e2e8f0}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:#f1f5f9;color:var(--ink)}
+  header.hero{background:linear-gradient(135deg,#3b0764,#7e22ce 55%,#0ea5e9);color:#fff;padding:40px 24px 32px}
+  header.hero .wrap,main.wrap{max-width:1180px;margin:0 auto}
+  header.hero h1{margin:0 0 8px;font-size:clamp(24px,4vw,38px)}
+  header.hero p{margin:6px 0;opacity:.94}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .badge{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:6px 12px;border-radius:999px;font-size:13px}
+  nav.tabs{position:sticky;top:0;z-index:50;background:var(--bg);display:flex;gap:4px;overflow-x:auto;padding:8px 12px}
+  nav.tabs a{color:#cbd5e1;text-decoration:none;padding:10px 14px;border-radius:8px;white-space:nowrap;font-size:14px}
+  nav.tabs a:hover,nav.tabs a.active{background:#334155;color:#fff}
+  section{padding:28px 24px}
+  section .wrap{max-width:1180px;margin:0 auto}
+  h2{font-size:24px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 2px 10px rgba(15,23,42,.05);margin-bottom:18px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr}}
+  .verdict{border-left:8px solid var(--accent)}
+  .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;margin:1px}
+  .ok{background:#dcfce7;color:#166534}.warnx{background:#fef3c7;color:#92400e}.badx{background:#fee2e2;color:#991b1b}.info{background:#e0f2fe;color:#075985}.grey{background:#f1f5f9;color:#475569}.purp{background:#f3e8ff;color:#6b21a8}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{background:#f8fafc;cursor:pointer;user-select:none;white-space:nowrap}
+  th:hover{color:var(--accent2)}
+  tr:hover td{background:#f8fafc}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;align-items:center}
+  .controls select,.controls input[type=text]{padding:9px 12px;border:1px solid var(--line);border-radius:9px;font-size:14px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .bar-row{display:grid;grid-template-columns:250px 1fr 80px;gap:10px;align-items:center;margin:7px 0;font-size:13px}
+  .bar-track{background:#eef2f7;border-radius:8px;height:22px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent),#4ade80);transition:width .5s}
+  .bar-fill.blue{background:linear-gradient(90deg,#0284c7,#38bdf8)}
+  .bar-fill.amber{background:linear-gradient(90deg,#b45309,#fbbf24)}
+  .bar-fill.red{background:linear-gradient(90deg,#b91c1c,#f87171)}
+  .bar-fill.purp{background:linear-gradient(90deg,#7e22ce,#c084fc)}
+  .detail-btn{background:var(--accent2);color:#fff;border:none;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}
+  #modal{position:fixed;inset:0;background:rgba(2,6,23,.6);display:none;align-items:flex-start;justify-content:center;padding:30px 16px;z-index:100;overflow-y:auto}
+  #modal.open{display:flex}
+  #modal .box{background:#fff;border-radius:16px;max-width:760px;width:100%;padding:26px;position:relative}
+  #modal .x{position:absolute;top:12px;right:14px;border:none;background:#f1f5f9;border-radius:8px;font-size:18px;cursor:pointer;padding:4px 10px}
+  input[type=range]{width:150px;accent-color:var(--accent)}
+  .score-row{display:flex;align-items:center;gap:12px;margin:8px 0;font-size:14px;flex-wrap:wrap}
+  .score-row label{width:200px;font-weight:600}
+  footer{background:var(--bg);color:#94a3b8;padding:26px 24px;font-size:13px}
+  footer .wrap{max-width:1180px;margin:0 auto}
+  .note{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;font-size:14px}
+  .kpi{display:flex;gap:14px;flex-wrap:wrap}
+  .kpi .k{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px 16px;min-width:140px}
+  .kpi .k b{font-size:20px;display:block}
+  ul.tight li{margin:5px 0}
+  code{background:#f1f5f9;padding:2px 6px;border-radius:6px;font-size:13px}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <h1>🧪 Citizens Protein Project (2024) — Interactive Report</h1>
+  <p>The original self-funded Indian study: <b>36 protein powders</b> (18 whey-based, 14 blends, 4 plant-based; 20 Indian-made + 16 multinational), blind-coded and tested at Neogen Food &amp; Animal Security, Kochi — protein, aflatoxins, pesticides, 6 heavy metals, steroids &amp; full GC-MS scan.</p>
+  <div class="badges"><span class="badge">36 products, codes 1–36</span><span class="badge">Philips et al., Medicine 2024;103:14(e37724)</span><span class="badge">69.4% mislabelled • 75% lead-positive • 0 steroids</span></div>
+</div></header>
+<nav class="tabs">
+  <a href="#verdict" class="active">🏆 Verdict</a><a href="#compare">📊 Compare all 36</a><a href="#charts">📈 Charts</a>
+  <a href="#safety">🛡️ Safety</a><a href="#gcms">🔬 GC-MS solvents</a><a href="#score">⚖️ My Score</a><a href="#method">🔬 Method</a>
+</nav>
+<main>
+<section id="verdict"><div class="wrap">
+  <h2>🏆 Verdict — best &amp; worst of the 36</h2>
+  <p class="sub">Ranked on detected protein + label honesty + hard contaminants (metals, aflatoxin, pesticides, hepatotoxic herbs). Click any product in the Compare table for its dossier.</p>
+  <div class="card verdict">
+    <div style="font-weight:700;color:var(--accent)">🥇 BEST OVERALL — Code 12, Ultimate Nutrition Prostar Whey</div>
+    <h3 style="margin:4px 0">71.7% protein, zero metals / aflatoxin / pesticides detected</h3>
+    <p><span class="pill ok">Protein 71.71%</span> <span class="pill ok">Pb/Cd/As: all BLQ</span> <span class="pill ok">Aflatoxin BLQ</span> <span class="pill ok">Pesticides BLQ</span> <span class="pill ok">No herbs</span></p>
+    <p>Highest protein among the fully-clean products, with no hepatotoxic botanicals. Only caveat: label said 83% (Δ −13.6%), so it under-fills its claim — but what is in the tub is clean, high-protein whey blend.</p>
+  </div>
+  <div class="grid2">
+    <div class="card"><div style="font-weight:700;color:#0284c7">🥈 RUNNER-UP — Code 6, One Science Whey</div>
+      <p><span class="pill info">Protein 68.37%</span> <span class="pill ok">All hard contaminants BLQ</span></p>
+      <p>Clean whey blend (only copper 1.92 mg/kg, the lowest tier). Same caveat as #12: label claimed 83%.</p></div>
+    <div class="card"><div style="font-weight:700;color:#b45309">🥉 MOST HONEST LABELS (accurate + clean)</div>
+      <p><span class="pill ok">#16 Quista Pro: +0.8%</span> <span class="pill ok">#9 Origin Vegan: −0.7%</span> <span class="pill ok">#14 Protinex: +0.6%</span> <span class="pill ok">#15 ON Isolate: −0.3%</span></p>
+      <p>But read the fine print: #16 lists ashwagandha + taurine, and #15 carries aflatoxin 7.51 µg/kg — accuracy isn't purity.</p></div>
+  </div>
+  <div class="card"><h3 style="margin-top:0">⚠️ Worst offenders — avoid</h3>
+    <ul class="tight">
+      <li><b>#29 Bakson (7.99%) &amp; #17 B-Protein (10.41%)</b> — single-digit/low-double-digit protein; #17 also has aflatoxin. <span class="pill badx">Avoid</span></li>
+      <li><b>#25 Big Muscles Vegan (19.41%)</b> — label claimed 81.3% (−76%!), plus fenobucarb pesticide + lead 0.31. <span class="pill badx">Avoid</span></li>
+      <li><b>#24 Frotein Whey (26.13%)</b> — claimed 76.5% (−65.8% deficit). <span class="pill badx">Avoid</span></li>
+      <li><b>#10 Forever Soy (Cu 30.61), #33 Herbalife F1 (Cu 20.8), #29 (Cu 16.8)</b> — extreme copper loads. <span class="pill badx">Avoid</span></li>
+      <li><b>#30 Elements (aflatoxin 15.56 — highest), #36 Nutrilite (13.15), #15 ON Isolate (7.51)</b> — top-protein products ruined by fungal toxin. <span class="pill warnx">Caution</span></li>
+      <li><b>#21 Muscletech (+18% over label)</b> — more protein than claimed sounds good until you recall the paper's spiking discussion and the brand's 2015 amino-spiking settlement. <span class="pill warnx">Caution</span></li>
+    </ul></div>
+</div></section>
+<section id="compare" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <h2>📊 All 36 products — sortable</h2>
+  <p class="sub">Click headers to sort. Δ = (detected − label) ÷ label. “—” = BLQ (not detected).</p>
+  <div class="controls">
+    <input type="text" id="q" placeholder="🔍 Search…" oninput="renderTable()">
+    <select id="tf" onchange="renderTable()"><option value="all">All types</option><option value="whey">Whey-based (18)</option><option value="blend">Blends (14)</option><option value="plant">Plant-based (4)</option></select>
+    <button class="chip" id="cIso" onclick="toggleIso()">Hide isolate-only</button>
+  </div>
+  <div class="card" style="overflow-x:auto;padding:8px"><table><thead><tr>
+    <th onclick="sortBy('c')">Code</th><th onclick="sortBy('brand')">Product</th><th onclick="sortBy('type')">Type</th>
+    <th onclick="sortBy('lab')">Label %</th><th onclick="sortBy('det')">Detected %</th><th onclick="sortBy('d')">Δ %</th>
+    <th onclick="sortBy('lead')">Pb</th><th onclick="sortBy('cad')">Cd</th><th onclick="sortBy('ars')">As</th><th onclick="sortBy('cu')">Cu</th>
+    <th>Afla / Pest</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+</div></section>
+<section id="charts"><div class="wrap">
+  <h2>📈 Charts</h2><p class="sub">Pick a metric. For Δ, green = over-delivers, red = under-delivers vs label.</p>
+  <div class="card"><div class="controls" id="metricBtns">
+    <button class="chip on" data-m="det">Detected protein %</button><button class="chip" data-m="d">Label honesty Δ%</button>
+    <button class="chip" data-m="lead">Lead</button><button class="chip" data-m="cu">Copper</button><button class="chip" data-m="gcc">GC-MS compound count</button>
+  </div><div id="chart"></div></div>
+</div></section>
+<section id="safety" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <h2>🛡️ Safety findings</h2><p class="sub">Values from Table 1 of the paper (Neogen lab; LOQ: metals 0.025 mg/kg, aflatoxin 1.5 µg/kg, pesticides 0.01 mg/kg).</p>
+  <div class="grid3">
+    <div class="card"><h3 style="margin-top:0">Heavy metals</h3>
+      <p>🔴 <b>Lead in 24/36 (67%)</b> — worst: #27 (0.32), #25 (0.31), #30 (0.28).<br>
+      🟡 <b>Cadmium in 14/36</b> — worst: #23 (0.30), #13 &amp; #22 (0.29).<br>
+      🟡 <b>Arsenic in 12/36</b> — worst: #28 (0.085), #27 (0.075).<br>
+      🟠 <b>Copper in 33/36</b> (1.49–30.61) — extremes: #10 (30.61), #33 (20.8), #29 (16.8).<br>
+      ✅ Mercury &amp; thallium: zero detections.</p></div>
+    <div class="card"><h3 style="margin-top:0">Aflatoxin &amp; pesticides</h3>
+      <p>🔴 Aflatoxin in <b>5/36</b>: #30 (15.56), #36 (13.15), #15 (7.51), #10 (2.93), #17 (2.25) µg/kg.<br>
+      🔴 Pesticides in <b>3/36</b>: #25 fenobucarb 0.061 (6× FSSAI limit), #34 azoxystrobin + dimethomorph, #35 thiamethoxam.<br>
+      ✅ Steroids/hormones: <b>none detected in any product</b> (only natural phytosteroids in plant formulas).</p></div>
+    <div class="card"><h3 style="margin-top:0">Hepatotoxic herbs on labels</h3>
+      <p>⚠️ <b>8 products</b> list known liver-risk botanicals: #1 (green tea, curcumin, garcinia), #11 &amp; #34 &amp; #35 (ashwagandha blends), #16 (ashwagandha), #13 (herbal extracts), #30 (5 herbs, protein type undisclosed), #33 (turmeric). Presence was read off labels, not chemically confirmed.</p></div>
+  </div>
+  <div class="note"><b>Transparency note:</b> the paper's text cites lower tallies (Pb 27/36, Cd 10/36, As 5/36, aflatoxin “4 products”) than a direct count of its own Table 1 gives (Pb 24, Cd 14, As 12, aflatoxin 5). The tables and charts on this page use the <b>Table 1 values verbatim</b> — sort the Compare table yourself to verify.</div>
+</div></section>
+<section id="gcms"><div class="wrap">
+  <h2>🔬 GC-MS solvent / volatile scan</h2>
+  <p class="sub">Presence (not quantity) of notable volatiles per product, from supplementary matrix s004 (513 compounds). Toluene, chloroform, isopropyl alcohol &amp; isocyanate are the ones with documented liver/kidney toxicity on chronic exposure.</p>
+  <div class="card"><div class="kpi">
+    <div class="k">Cycloheptatriene<b>30/36</b>products</div><div class="k">Toluene<b>26/36</b>products</div>
+    <div class="k">Trichloromethane<b>26/36</b>products</div><div class="k">Isopropyl alcohol<b>19/36</b>products</div>
+    <div class="k">Hydrogen isocyanate<b>18/36</b>products</div><div class="k">Most compounds (one product)<b>#11: 87</b></div>
+  </div></div>
+  <div class="card" style="overflow-x:auto"><table><thead><tr><th>Code</th><th>Product</th><th>Total compounds</th><th>Cyclohept.</th><th>Toluene</th><th>CHCl₃</th><th>Iso-prop.</th><th>H-isocyan.</th></tr></thead><tbody id="grows"></tbody></table></div>
+</div></section>
+<section id="score" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <h2>⚖️ Build your own score</h2><p class="sub">Default: protein 30 • label honesty 25 • safety 30 • solvent load 15. Drag to re-rank live.</p>
+  <div class="card">
+    <div class="score-row"><label>Protein content <b id="wPv">30</b></label><input type="range" id="wP" min="0" max="60" value="30" oninput="rescore()"></div>
+    <div class="score-row"><label>Label honesty <b id="wAv">25</b></label><input type="range" id="wA" min="0" max="60" value="25" oninput="rescore()"></div>
+    <div class="score-row"><label>Safety record <b id="wSv">30</b></label><input type="range" id="wS" min="0" max="60" value="30" oninput="rescore()"></div>
+    <div class="score-row"><label>Solvent load (fewer better) <b id="wFv">15</b></label><input type="range" id="wF" min="0" max="60" value="15" oninput="rescore()"></div>
+    <div id="scoreOut" style="margin-top:14px"></div>
+  </div>
+</div></section>
+<section id="method"><div class="wrap">
+  <h2>🔬 Method &amp; sources</h2>
+  <div class="card"><ul class="tight">
+    <li><b>Paper:</b> Philips CA et al., <i>Medicine</i> 2024;103:14(e37724) — self-funded, blind-coded, Neogen (FSSAI-approved) lab, Kochi. Kjeldahl protein, HPLC-FLD aflatoxin, GC/LC-MS/MS pesticides, ICP-MS metals, GC-MS steroids + full scan.</li>
+    <li><b>Code ↔ brand mapping:</b> Table 1 codes follow the master-chart serials in <code>medi-103-e37724-s001.pdf</code>; label claims transcribed from the same chart.</li>
+    <li><b>Types:</b> 18 whey-based / 14 blends / 4 plant-based per the paper; isolate-only flags (#7, #13, #15) from label photos. 20 Indian-made vs 16 multinational is the paper's aggregate.</li>
+    <li><b>GC-MS matrix:</b> presence/absence from <code>medi-103-e37724-s004.xlsx</code> (“Final List”, 513 compounds); match-factor IDs, not quantifications — false positives/negatives possible (paper's own caveat).</li>
+    <li><b>Methods doc:</b> <code>medi-103-e37724-s002.docx</code> details the Kjeldahl/HPLC/ICP-MS protocols.</li>
+  </ul></div>
+</div></section>
+</main>
+<div id="modal"><div class="box"><button class="x" onclick="closeModal()">✕</button><div id="modalBody"></div></div></div>
+<footer><div class="wrap">Interactive summary of Philips et al., Medicine 2024 (Citizens Protein Project 1). Table values transcribed from the paper; verify against the originals before purchase or clinical decisions.</div></footer>
+<script>
+const P=[{"c": 1, "brand": "Himalayan Organics Protein Super Herbs (Women)", "type": "blend", "iso": 0, "lab": 68.4, "det": 65.65, "afl": 0, "pest": "", "ars": 0, "cad": 0, "lead": 0.086, "cu": 1.61, "gcc": 23, "g": ["cyc", "tol", "tcm"], "herb": "green tea extract, curcumin, garcinia"}, {"c": 2, "brand": "Oriflame High Protein Nutrishake (Vanilla)", "type": "blend", "iso": 0, "lab": 41.1, "det": 43.28, "afl": 0, "pest": "", "ars": 0, "cad": 0, "lead": 0.04, "cu": 4.41, "gcc": 51, "g": ["cyc", "tol", "tcm", "ipa"], "herb": ""}, {"c": 3, "brand": "Nutrabox Whey Protein", "type": "whey", "iso": 0, "lab": 72.7, "det": 58.17, "afl": 0, "pest": "", "ars": 0, "cad": 0, "lead": 0, "cu": 1.51, "gcc": 28, "g": ["cyc", "tol", "tcm", "ipa"], "herb": ""}, {"c": 4, "brand": "GNC Whey Protein", "type": "whey", "iso": 0, "lab": 68.57, "det": 63.93, "afl": 0, "pest": "", "ars": 0, "cad": 0.038, "lead": 0, "cu": 2.94, "gcc": 54, "g": ["cyc", "tol", "tcm"], "herb": ""}, {"c": 5, "brand": "Dymatize Whey Protein", "type": "whey", "iso": 0, "lab": 71.0, "det": 73.34, "afl": 0, "pest": "", "ars": 0.029, "cad": 0, "lead": 0, "cu": 2.87, "gcc": 36, "g": ["cyc", "tol", "tcm", "ipa"], "herb": ""}, {"c": 6, "brand": "One Science Whey Protein", "type": "whey", "iso": 0, "lab": 83.0, "det": 68.37, "afl": 0, "pest": "", "ars": 0, "cad": 0, "lead": 0, "cu": 1.92, "gcc": 57, "g": ["cyc", "tol", "tcm", "ipa"], "herb": ""}, {"c": 7, "brand": "MuscleBlaze Whey Gold", "type": "whey", "iso": 1, "lab": 82.0, "det": 76.11, "afl": 0, "pest": "", "ars": 0.043, "cad": 0, "lead": 0, "cu": 3.65, "gcc": 58, "g": ["cyc", "tol", "tcm", "ipa"], "herb": ""}, {"c": 8, "brand": "MuscleBlaze Whey Protein", "type": "whey", "iso": 0, "lab": 76.0, "det": 71.65, "afl": 0, "pest": "", "ars": 0.047, "cad": 0, "lead": 0, "cu": 4.43, "gcc": 52, "g": ["cyc", "tol", "ipa"], "herb": ""}, {"c": 9, "brand": "Origin Vegan Protein", "type": "plant", "iso": 0, "lab": 64.1, "det": 63.63, "afl": 0, "pest": "", "ars": 0, "cad": 0, "lead": 0, "cu": 4.57, "gcc": 38, "g": ["cyc", "tol", "tcm", "ipa"], "herb": ""}, {"c": 10, "brand": "Forever Lite Ultra Soy Protein", "type": "plant", "iso": 0, "lab": 52.0, "det": 50.65, "afl": 2.93, "pest": "", "ars": 0.048, "cad": 0, "lead": 0.033, "cu": 30.61, "gcc": 67, "g": ["cyc", "tol", "ipa"], "herb": ""}, {"c": 11, "brand": "Nutrela Whey Protein (Patanjali)", "type": "whey", "iso": 0, "lab": 80.0, "det": 73.16, "afl": 0, "pest": "", "ars": 0.028, "cad": 0.028, "lead": 0, "cu": 11.66, "gcc": 87, "g": ["cyc", "tol", "tcm", "ipa", "hic"], "herb": "ashwagandha + 13 other herbs"}, {"c": 12, "brand": "Ultimate Nutrition Prostar Whey", "type": "whey", "iso": 0, "lab": 83.0, "det": 71.71, "afl": 0, "pest": "", "ars": 0, "cad": 0, "lead": 0, "cu": 2.38, "gcc": 60, "g": ["cyc", "tol", "tcm", "ipa", "hic"], "herb": ""}, {"c": 13, "brand": "Nutrela Patanjali Whey Protein", "type": "whey", "iso": 1, "lab": 90.0, "det": 80.34, "afl": 0, "pest": "", "ars": 0, "cad": 0.29, "lead": 0, "cu": 0, "gcc": 53, "g": ["cyc", "tol", "tcm", "ipa", "hic"], "herb": "herbal extracts (label)"}, {"c": 14, "brand": "Protinex", "type": "blend", "iso": 0, "lab": 34.0, "det": 34.22, "afl": 0, "pest": "", "ars": 0.063, "cad": 0, "lead": 0, "cu": 5.34, "gcc": 39, "g": ["cyc", "tol", "tcm"], "herb": ""}, {"c": 15, "brand": "Optimum Nutrition Whey Isolate", "type": "whey", "iso": 1, "lab": 81.0, "det": 80.72, "afl": 7.51, "pest": "", "ars": 0, "cad": 0, "lead": 0.04, "cu": 1.49, "gcc": 59, "g": ["cyc", "tol", "tcm", "ipa", "hic"], "herb": ""}, {"c": 16, "brand": "Quista Pro Himalaya Whey", "type": "whey", "iso": 0, "lab": 64.7, "det": 65.19, "afl": 0, "pest": "", "ars": 0, "cad": 0, "lead": 0, "cu": 2.97, "gcc": 57, "g": ["cyc", "tol", "tcm"], "herb": "ashwagandha (0.10%)"}, {"c": 17, "brand": "British Biologicals B-Protein", "type": "blend", "iso": 0, "lab": 40.0, "det": 10.41, "afl": 2.25, "pest": "", "ars": 0, "cad": 0.026, "lead": 0.1, "cu": 2.19, "gcc": 40, "g": ["cyc", "tol"], "herb": ""}, {"c": 18, "brand": "Nestle High Protein", "type": "blend", "iso": 0, "lab": 45.0, "det": 48.45, "afl": 0, "pest": "", "ars": 0, "cad": 0.071, "lead": 0, "cu": 0, "gcc": 28, "g": ["cyc", "tol", "tcm"], "herb": ""}, {"c": 19, "brand": "Abbott Ensure Plus", "type": "blend", "iso": 0, "lab": 19.0, "det": 19.59, "afl": 0, "pest": "", "ars": 0, "cad": 0.1, "lead": 0, "cu": 6.6, "gcc": 28, "g": ["cyc", "tol", "tcm", "hic"], "herb": ""}, {"c": 20, "brand": "Finish First Protein Matrix", "type": "whey", "iso": 0, "lab": 47.0, "det": 46.29, "afl": 0, "pest": "", "ars": 0, "cad": 0.19, "lead": 0, "cu": 3.76, "gcc": 57, "g": ["cyc", "tol", "tcm"], "herb": ""}, {"c": 21, "brand": "MuscleTech NitroTech Whey", "type": "whey", "iso": 0, "lab": 65.2, "det": 76.96, "afl": 0, "pest": "", "ars": 0, "cad": 0.11, "lead": 0, "cu": 2.4, "gcc": 63, "g": ["cyc", "tol", "tcm", "ipa"], "herb": ""}, {"c": 22, "brand": "Optimum Nutrition Gold Standard Whey", "type": "whey", "iso": 0, "lab": 79.0, "det": 75.8, "afl": 0, "pest": "", "ars": 0, "cad": 0.29, "lead": 0, "cu": 2.97, "gcc": 44, "g": ["cyc", "tol", "tcm", "hic"], "herb": ""}, {"c": 23, "brand": "Dr Morepen Whey Protein", "type": "whey", "iso": 0, "lab": 64.26, "det": 68.59, "afl": 0, "pest": "", "ars": 0, "cad": 0.3, "lead": 0, "cu": 2.19, "gcc": 43, "g": ["cyc", "tol", "ipa"], "herb": ""}, {"c": 24, "brand": "Frotein (Big Muscles) Whey", "type": "whey", "iso": 0, "lab": 76.5, "det": 26.13, "afl": 0, "pest": "", "ars": 0, "cad": 0.27, "lead": 0, "cu": 0, "gcc": 44, "g": ["cyc", "tol", "hic"], "herb": ""}, {"c": 25, "brand": "Big Muscles Vegan Protein", "type": "plant", "iso": 0, "lab": 81.3, "det": 19.41, "afl": 0, "pest": "Fenobucarb 0.061", "ars": 0, "cad": 0.042, "lead": 0.31, "cu": 5.73, "gcc": 61, "g": ["cyc", "ipa", "hic"], "herb": ""}, {"c": 26, "brand": "Fast&Up Whey Blend", "type": "whey", "iso": 0, "lab": 75.0, "det": 68.58, "afl": 0, "pest": "", "ars": 0, "cad": 0.25, "lead": 0, "cu": 3.29, "gcc": 39, "g": ["cyc", "tol", "tcm", "hic"], "herb": ""}, {"c": 27, "brand": "HealthKart My First Protein", "type": "blend", "iso": 0, "lab": 32.0, "det": 33.42, "afl": 0, "pest": "", "ars": 0.075, "cad": 0.037, "lead": 0.32, "cu": 4.48, "gcc": 46, "g": ["cyc", "tol", "tcm", "hic"], "herb": ""}, {"c": 28, "brand": "Vestige Protein Powder", "type": "blend", "iso": 0, "lab": 82.0, "det": 79.0, "afl": 0, "pest": "", "ars": 0.085, "cad": 0, "lead": 0.23, "cu": 9.34, "gcc": 21, "g": ["cyc", "ipa"], "herb": ""}, {"c": 29, "brand": "Bakson Protein Plus", "type": "blend", "iso": 0, "lab": 16.7, "det": 7.99, "afl": 0, "pest": "", "ars": 0.031, "cad": 0, "lead": 0.26, "cu": 16.8, "gcc": 47, "g": ["cyc", "ipa", "hic"], "herb": ""}, {"c": 30, "brand": "Elements Protein Powder", "type": "blend", "iso": 0, "lab": 80.0, "det": 76.44, "afl": 15.56, "pest": "", "ars": 0.026, "cad": 0, "lead": 0.28, "cu": 8.8, "gcc": 52, "g": ["tcm", "ipa", "hic"], "herb": "5 herbal extracts; protein type undisclosed"}, {"c": 31, "brand": "MyProtein Impact Whey", "type": "whey", "iso": 0, "lab": 76.0, "det": 71.04, "afl": 0, "pest": "", "ars": 0, "cad": 0, "lead": 0.23, "cu": 1.49, "gcc": 22, "g": ["hic"], "herb": ""}, {"c": 32, "brand": "Herbalife Personalized Protein Powder", "type": "blend", "iso": 0, "lab": 82.7, "det": 84.5, "afl": 0, "pest": "", "ars": 0.029, "cad": 0, "lead": 0.26, "cu": 11.27, "gcc": 23, "g": ["tcm", "hic"], "herb": ""}, {"c": 33, "brand": "Herbalife Formula 1 Shake", "type": "blend", "iso": 0, "lab": 36.0, "det": 35.67, "afl": 0, "pest": "", "ars": 0, "cad": 0, "lead": 0.23, "cu": 20.8, "gcc": 77, "g": ["tcm", "ipa", "hic"], "herb": "turmeric extract"}, {"c": 34, "brand": "Oziva Protein & Herbs", "type": "blend", "iso": 0, "lab": 71.7, "det": 65.49, "afl": 0, "pest": "Azoxystrobin 0.033 + Dimethomorph 0.013", "ars": 0, "cad": 0, "lead": 0.27, "cu": 1.71, "gcc": 53, "g": ["cyc", "tcm", "hic"], "herb": "ashwagandha + 6-herb blend"}, {"c": 35, "brand": "Dr Vaidya's Weight Plus", "type": "blend", "iso": 0, "lab": 25.81, "det": 20.52, "afl": 0, "pest": "Thiamethoxam 0.017", "ars": 0, "cad": 0, "lead": 0.22, "cu": 5.33, "gcc": 51, "g": ["hic"], "herb": "ashwagandha + 5-herb blend"}, {"c": 36, "brand": "Nutrilite All Plant Protein (Amway)", "type": "plant", "iso": 0, "lab": 80.0, "det": 84.69, "afl": 13.15, "pest": "", "ars": 0.03, "cad": 0, "lead": 0.23, "cu": 10.83, "gcc": 24, "g": ["tcm", "hic"], "herb": ""}];
+P.forEach(p=>{p.d=+((p.det-p.lab)/p.lab*100).toFixed(1);});
+let sortK="det",sortD=-1,hideIso=false;
+function fmt(v){return v===0?"—":v;}
+function flagHtml(p){
+  const f=[];
+  if(p.afl)f.push("aflatoxin "+p.afl);
+  if(p.pest)f.push("pesticide");
+  if(p.lead>=0.3||p.cu>10)f.push("heavy load");
+  else if(p.lead>0||p.cad>0||p.ars>0)f.push("metal trace");
+  if(p.herb)f.push("herbs");
+  if(p.d<=-50)f.push("−50% protein!");
+  else if(p.d<=-20)f.push("big shortfall");
+  if(p.d>=15)f.push("over label?!");
+  if(!f.length)return '<span class="pill ok">Clean sheet</span>';
+  return f.map(x=>'<span class="pill '+(/(aflatoxin|pesticide|heavy|−50)/.test(x)?"badx":"warnx")+'">'+x+"</span>").join(" ");
+}
+function sortBy(k){if(sortK===k)sortD*=-1;else{sortK=k;sortD=(k==="brand"||k==="type")?1:-1;}renderTable();}
+function toggleIso(){hideIso=!hideIso;document.getElementById("cIso").classList.toggle("on",hideIso);renderTable();}
+function renderTable(){
+  const q=(document.getElementById("q").value||"").toLowerCase(),tf=document.getElementById("tf").value;
+  let r=P.filter(p=>(p.brand+p.c).toLowerCase().includes(q)&&(tf==="all"||p.type===tf)&&!(hideIso&&p.iso));
+  r.sort((a,b)=>{const x=a[sortK],y=b[sortK];return typeof x==="string"?sortD*x.localeCompare(y):sortD*(x-y);});
+  document.getElementById("rows").innerHTML=r.map(p=>'<tr><td><b>'+p.c+'</b></td><td>'+p.brand+(p.iso?' <span class="pill grey">isolate-only</span>':"")+(p.herb?' <span class="pill warnx">herbs</span>':"")+'</td><td>'+p.type+'</td><td>'+p.lab+'</td><td><b>'+p.det+'</b></td><td>'+(p.d>0?"+":"")+p.d+'%</td><td>'+fmt(p.lead)+'</td><td>'+fmt(p.cad)+'</td><td>'+fmt(p.ars)+'</td><td>'+(p.cu===0?"—":p.cu)+'</td><td>'+(p.afl||p.pest?'<span class="pill badx">'+[p.afl?("AFL "+p.afl):"",p.pest].filter(Boolean).join("; ")+"</span>":'<span class="pill ok">clear</span>')+'</td><td><button class="detail-btn" onclick="openModal('+p.c+')">Details</button></td></tr>').join("");
+}
+let metric="det";
+const META={det:{label:"Detected protein %",max:90,cls:"",lo:false},d:{label:"Δ vs label %",max:80,cls:"blue",lo:false,div:true},
+ lead:{label:"Lead mg/kg",max:0.35,cls:"red",lo:true},cu:{label:"Copper mg/kg",max:31,cls:"amber",lo:true},gcc:{label:"GC-MS compounds",max:90,cls:"purp",lo:true}};
+function renderChart(){
+  const m=META[metric];
+  const arr=[...P].sort((a,b)=>metric==="d"?(b.d-a.d):(m.lo?(a[metric]-b[metric]):(b[metric]-a[metric])));
+  document.getElementById("chart").innerHTML=arr.map(p=>{
+    let v=p[metric],w;
+    if(metric==="d"){w=Math.min(100,Math.abs(v)/m.max*100);const col=v>=0?"":"red";
+      return '<div class="bar-row"><div><b>#'+p.c+'</b> '+p.brand+'</div><div class="bar-track"><div class="bar-fill '+col+'" style="width:'+Math.max(2,w)+'%"></div></div><div><b>'+(v>0?"+":"")+v+'%</b></div></div>';}
+    w=Math.max(2,100*(v||0)/m.max);
+    return '<div class="bar-row"><div><b>#'+p.c+'</b> '+p.brand+'</div><div class="bar-track"><div class="bar-fill '+m.cls+'" style="width:'+w+'%"></div></div><div><b>'+(v===0&&m.lo?"BLQ":v)+'</b></div></div>';}).join("");
+}
+document.getElementById("metricBtns").addEventListener("click",e=>{if(e.target.dataset.m){metric=e.target.dataset.m;document.querySelectorAll("#metricBtns .chip").forEach(c=>c.classList.remove("on"));e.target.classList.add("on");renderChart();}});
+function renderGcms(){
+  const dot=h=>'<span class="pill '+(h?"badx":"ok")+'">'+(h?"✕":"✓")+"</span>";
+  document.getElementById("grows").innerHTML=P.map(p=>'<tr><td><b>'+p.c+'</b></td><td>'+p.brand+'</td><td><b>'+p.gcc+'</b></td><td>'+dot(p.g.includes("cyc"))+'</td><td>'+dot(p.g.includes("tol"))+'</td><td>'+dot(p.g.includes("tcm"))+'</td><td>'+dot(p.g.includes("ipa"))+'</td><td>'+dot(p.g.includes("hic"))+'</td></tr>').join("");
+}
+function openModal(c){
+  const p=P.find(x=>x.c===c);
+  document.getElementById("modalBody").innerHTML='<h2 style="margin-top:0">#'+p.c+' — '+p.brand+'</h2><p style="color:var(--muted)">'+p.type+(p.iso?" • isolate-only":"")+' • Label <b>'+p.lab+'%</b> • Detected <b>'+p.det+'%</b> (Δ '+(p.d>0?"+":"")+p.d+'%)</p>'
+  +'<div class="kpi"><div class="k">Detected<b>'+p.det+'%</b></div><div class="k">Lead<b>'+fmt(p.lead)+'</b>mg/kg</div><div class="k">Copper<b>'+(p.cu===0?"BLQ":p.cu)+'</b>mg/kg</div><div class="k">GC-MS<b>'+p.gcc+'</b>compounds</div></div>'
+  +'<h3>Contaminants</h3><table><tr><th>Test</th><th>Result</th></tr><tr><td>Aflatoxin</td><td>'+(p.afl?p.afl+" µg/kg":"BLQ")+'</td></tr><tr><td>Pesticides</td><td>'+(p.pest||"BLQ")+'</td></tr><tr><td>Arsenic / Cadmium / Lead</td><td>'+fmt(p.ars)+' / '+fmt(p.cad)+' / '+fmt(p.lead)+' mg/kg</td></tr><tr><td>Mercury / Thallium</td><td>BLQ / BLQ (all 36)</td></tr><tr><td>Steroids</td><td>None detected (all 36)</td></tr>'+(p.herb?'<tr><td>Herbs on label</td><td>'+p.herb+'</td></tr>':"")+'</table>'
+  +'<p>GC-MS volatiles: '+["cyc|Cycloheptatriene","tol|Toluene","tcm|Trichloromethane","ipa|Isopropanol","hic|H-isocyanate"].map(s=>{const[k,n]=s.split("|");return '<span class="pill '+(p.g.includes(k)?"badx":"ok")+'">'+n+"</span>";}).join(" ")+'</p><p>'+flagHtml(p)+'</p>';
+  document.getElementById("modal").classList.add("open");
+}
+function closeModal(){document.getElementById("modal").classList.remove("open");}
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal();});
+function rescore(){
+  const wP=+document.getElementById("wP").value,wA=+document.getElementById("wA").value,wS=+document.getElementById("wS").value,wF=+document.getElementById("wF").value;
+  document.getElementById("wPv").textContent=wP;document.getElementById("wAv").textContent=wA;document.getElementById("wSv").textContent=wS;document.getElementById("wFv").textContent=wF;
+  const tot=(wP+wA+wS+wF)||1;
+  const sc=P.map(p=>{
+    const prot=p.det/90,hon=Math.max(0,1-Math.min(80,Math.abs(p.d))/80);
+    let safe=1;
+    if(p.afl)safe-=0.4;if(p.pest)safe-=0.35;if(p.lead>0)safe-=0.2;if(p.cad>0)safe-=0.2;if(p.ars>0)safe-=0.15;if(p.cu>10)safe-=0.15;if(p.herb)safe-=0.15;safe=Math.max(0,safe);
+    const solv=1-p.gcc/90;
+    return{c:p.c,brand:p.brand,score:+((100*(wP*prot+wA*hon+wS*safe+wF*solv)/tot).toFixed(1))};}).sort((a,b)=>b.score-a.score);
+  document.getElementById("scoreOut").innerHTML=sc.map((p,i)=>'<div class="bar-row"><div>'+(i===0?"🥇 ":i===1?"🥈 ":i===2?"🥉 ":"#"+(i+1)+" ")+'<b>#'+p.c+'</b> '+p.brand+'</div><div class="bar-track"><div class="bar-fill '+(i===0?"":"blue")+'" style="width:'+p.score+'%"></div></div><div><b>'+p.score+'</b></div></div>').join("");
+}
+document.querySelectorAll("nav.tabs a").forEach(a=>a.addEventListener("click",()=>{document.querySelectorAll("nav.tabs a").forEach(x=>x.classList.remove("active"));a.classList.add("active");}));
+renderTable();renderChart();renderGcms();rescore();
+</script>
+</body>
+</html>
