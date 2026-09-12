@@ -21,8 +21,9 @@ export function hero({ kicker, title, lede, badges }) {
   return [
     '<header class="hero">',
     '<div class="wrap">',
-    `<h1>${kicker} ${title}</h1>`,
-    `<p>${lede}</p>`,
+    `<p class="kicker">${kicker}</p>`,
+    `<h1>${title}</h1>`,
+    `<p class="lede">${lede}</p>`,
     `<div class="badges">${badgeHtml}</div>`,
     "</div>",
     "</header>",
