@@ -4,6 +4,7 @@ import {
   pageHead,
   hero,
   tabNav,
+  initScrollSpy,
   modalShell,
   pageFooter,
 } from "../shared/report-shell.js";
@@ -56,4 +57,8 @@ test("pageFooter carries the closing note", () => {
   const out = pageFooter({ note: "BLQ = below limit of quantification." });
   assert.match(out, /BLQ = below limit of quantification\./);
   assert.match(out, /<footer/);
+});
+
+test("initScrollSpy is a safe no-op without a DOM", () => {
+  assert.equal(typeof initScrollSpy(), "function");
 });

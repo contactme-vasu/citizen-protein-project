@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Citizens Protein Project (2024) — Interactive Report: 36 Protein Powders</title>
 <style>
-  html{scroll-padding-top:76px}
+  html{scroll-behavior:smooth;scroll-padding-top:76px}
   :root{--bg:#0f172a;--card:#ffffff;--muted:#64748b;--accent:#16a34a;--accent2:#0ea5e9;--ink:#0f172a;--line:#e2e8f0}
   *{box-sizing:border-box}
   body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:#f1f5f9;color:var(--ink)}
@@ -170,7 +170,7 @@
 <div id="shell-footer"></div>
 
 <script type="module">
-import { hero, tabNav, modalShell, pageFooter } from "./shared/report-shell.js";
+import { hero, tabNav, modalShell, pageFooter, initScrollSpy } from "./shared/report-shell.js";
 document.getElementById("shell-hero").outerHTML = hero({
   kicker: "🧪",
   title: "Citizens Protein Project (2024) — Interactive Report",
@@ -191,6 +191,7 @@ document.getElementById("shell-tabs").outerHTML = tabNav([
   { href: "#method", label: "🔬 Method" }
 ]);
 document.getElementById("shell-modal").outerHTML = modalShell();
+initScrollSpy();
 window.__shellReady=true;
 document.getElementById("shell-footer").outerHTML = pageFooter({
   note: "Interactive summary of Philips et al., Medicine 2024 (Citizens Protein Project 1: <a style=\"color:#7dd3fc\" href=\"https://pmc.ncbi.nlm.nih.gov/articles/PMC10994440/\">PMC10994440</a> · <a style=\"color:#7dd3fc\" href=\"https://meshindia.org/the-citizens-protein-project-one/\">meshindia.org</a>). Built with the help of LLMs/AI — table values transcribed from the paper; verify against the originals before purchase or clinical decisions. Not medical advice, not a recommendation or endorsement; independent project with no affiliation to the researchers, labs or brands; author accepts no liability."
@@ -262,7 +263,7 @@ function rescore(){
   const sc=score(P,{protein:wP,honesty:wA,safety:wS,solvents:wF},PROTEIN_2024_SCORE);
   document.getElementById("scoreOut").innerHTML=sc.map((p,i)=>'<div class="bar-row"><div>'+medal(i)+'<b>#'+p.c+'</b> '+p.brand+'</div><div class="bar-track"><div class="bar-fill '+(i===0?"":"blue")+'" style="width:'+p.score+'%"></div></div><div><b>'+p.score+'</b></div></div>').join("");
 }
-document.querySelectorAll("nav.tabs a").forEach(a=>a.addEventListener("click",()=>{document.querySelectorAll("nav.tabs a").forEach(x=>x.classList.remove("active"));a.classList.add("active");}));
+
 Object.assign(window,{renderTable,sortBy,toggleIso,openModal,closeModal,rescore});
 renderTable();renderChart();renderGcms();rescore();
 </script>

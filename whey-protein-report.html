@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Whey Protein Lab Report — Interactive Analysis (Concentrate &amp; Blends Only)</title>
 <style>
-  html{scroll-padding-top:76px}
+  html{scroll-behavior:smooth;scroll-padding-top:76px}
   :root{
     --bg:#0f172a; --bg2:#1e293b; --card:#ffffff; --muted:#64748b;
     --accent:#16a34a; --accent2:#0ea5e9; --warn:#d97706; --bad:#dc2626;
@@ -267,7 +267,7 @@
 <div id="shell-footer"></div>
 
 <script type="module">
-import { hero, tabNav, modalShell, pageFooter } from "./shared/report-shell.js";
+import { hero, tabNav, modalShell, pageFooter, initScrollSpy } from "./shared/report-shell.js";
 document.getElementById("shell-hero").outerHTML = hero({
   kicker: "🥛",
   title: "Whey Protein — Interactive Lab Analysis",
@@ -289,6 +289,7 @@ document.getElementById("shell-tabs").outerHTML = tabNav([
   { href: "#paper", label: "📄 Published paper" }
 ]);
 document.getElementById("shell-modal").outerHTML = modalShell();
+initScrollSpy();
 window.__shellReady=true;
 document.getElementById("shell-footer").outerHTML = pageFooter({
   note: "Interactive report generated from the 8 Eureka/MESH lab PDFs (Citizens Protein Project 2: <a style=\"color:#7dd3fc\" href=\"https://pmc.ncbi.nlm.nih.gov/articles/PMC12622730/\">PMC12622730</a> · <a style=\"color:#7dd3fc\" href=\"https://meshindia.org/introducing-the-citizens-protein-project-two/\">meshindia.org</a>). Built with the help of LLMs/AI — values transcribed as measured; BLQ = below limit of quantification. Not medical advice, not a recommendation or endorsement; independent project with no affiliation to the researchers, labs or brands; author accepts no liability. Verify against originals; consult a qualified professional. — Sept 2025 data."
@@ -382,8 +383,7 @@ function rescore(){
     `<div class="bar-row"><div>${medal(i)}<b>${p.s}</b> ${p.brand}</div>
      <div class="bar-track"><div class="bar-fill ${i===0?"":"blue"}" style="width:${p.score}%"></div></div><div><b>${p.score}</b></div></div>`).join("");
 }
-document.querySelectorAll('nav.tabs a').forEach(a=>a.addEventListener("click",()=>{
-  document.querySelectorAll('nav.tabs a').forEach(x=>x.classList.remove("active"));a.classList.add("active");}));
+
 Object.assign(window,{renderTable,setFilter,sortBy,openModal,closeModal,renderAmino,rescore});
 renderTable();renderChart();renderCu();renderAmino();rescore();
 </script>
