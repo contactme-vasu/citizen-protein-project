@@ -7,8 +7,8 @@
 <!--
   Design plan (frontend-design skill, lab-ledger concept):
   Color: paper #F7F8F5, ink #1A2E28, reagent amber #B45309 (single accent), quiet line #DDE3DC.
-  Type: Georgia serif for display only; system sans for everything else; sample codes as bordered chips.
-  Layout: left-aligned ruled ledger. Boldness lives in one place: the oversized headline + specimen-code strip.
+  Type: Georgia serif for display only; system sans for everything else.
+  Layout: left-aligned ruled ledger. Boldness lives in one place: the oversized headline.
   Deliberately avoided: gradient washes, identical card grids, all-caps eyebrows, middle-dot meta strings, arrows on links.
 -->
 <style>
@@ -25,10 +25,6 @@
   .masthead h1{font-family:Georgia,"Times New Roman",serif;font-weight:700;
     font-size:clamp(34px,6vw,58px);line-height:1.08;margin:0 0 14px;max-width:16ch}
   .masthead .sub{font-size:17px;color:#D5DCD7;margin:0;max-width:62ch}
-  .codes{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-  .codes span{border:1px solid #5A6E65;border-radius:6px;padding:3px 10px;font-size:13px;font-weight:600;color:#E7EDE9}
-  .codes span.hit{background:var(--amber);border-color:var(--amber);color:#fff}
-  .codes-note{font-size:12px;color:#8FA098;margin-top:10px}
   /* ledger */
   main{padding:36px 0 8px}
   .ledger{border-top:2px solid var(--ink)}
@@ -69,11 +65,6 @@
   <p class="kicker">Independent visualisation of two crowd-funded lab studies, built with AI</p>
   <h1>What is actually in India&rsquo;s protein powders?</h1>
   <p class="sub">Researchers bought powders off the shelf, tested them blind in accredited labs, and published every number. This site turns those tables into pages you can sort, filter, and compare.</p>
-  <div class="codes" aria-label="Blind sample codes from the studies">
-    <span>S2</span><span>S10</span><span>S11</span><span class="hit">S16</span><span>S31</span><span class="hit">S32</span><span>S33</span><span>S34</span>
-    <span>#12</span><span>#15</span><span>#21</span><span>#24</span><span>#25</span><span>#30</span>
-  </div>
-  <p class="codes-note">Blind codes from the lab reports. Highlighted: the two top-ranked 2025 wheys.</p>
 </div></header>
 
 <main><div class="wrap">
