@@ -1,0 +1,21 @@
+// 2025 whey dataset adapter: raw transcription of the Eureka/MESH lab PDFs.
+// BLQ (below limit of quantification) is recorded as the string "BLQ" — the
+// lab-dataset module turns it into zero. Numbers are transcribed verbatim.
+export const WHEY_2025 = [
+ {s:"S2", brand:"BYBV Concentrate", type:"Concentrate (per label)", protein:57.16, suc:"BLQ", tau:5.93, cu:4.400, hm:"All BLQ", afl:"All BLQ", st:"Not tested", flags:["Lowest protein","Highest copper","No steroid data"],
+  aa:{"Aspartic acid":6.71,"Glutamic acid":11.36,"Serine":3.26,"Histidine":1.65,"Glycine":1.07,"Threonine":4.24,"Arginine":1.78,"Alanine":3.13,"Tyrosine":2.15,"Cysteine":1.39,"Valine":3.05,"Methionine":1.53,"Tryptophan":0.48,"Phenylalanine":2.31,"Isoleucine":3.19,"Leucine":5.72,"Lysine":6.89,"Proline":5.90}},
+ {s:"S10", brand:"Jan Aushadhi Whey Concentrate", type:"Whey (blend / unspecified)", protein:68.52, suc:4.83, tau:"BLQ", cu:2.401, hm:"Cd 0.031 ⚠", afl:"All BLQ", st:"All BLQ", flags:["Cadmium detected","Sucrose 4.83g"],
+  aa:{"Aspartic acid":8.28,"Glutamic acid":12.86,"Serine":3.98,"Histidine":1.6,"Glycine":1.28,"Threonine":5.01,"Arginine":1.92,"Alanine":4.16,"Tyrosine":2.1,"Cysteine":1.86,"Valine":3.29,"Methionine":1.81,"Tryptophan":0.83,"Phenylalanine":2.38,"Isoleucine":3.73,"Leucine":7.53,"Lysine":7.97,"Proline":5.52}},
+ {s:"S11", brand:"Nakpro Gold (Whey)", type:"Blend (conc. + isolate)", protein:67.53, suc:"BLQ", tau:"BLQ", cu:0.682, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:[],
+  aa:{"Aspartic acid":7.80,"Glutamic acid":13.02,"Serine":3.88,"Histidine":1.64,"Glycine":1.24,"Threonine":4.64,"Arginine":1.87,"Alanine":3.87,"Tyrosine":2.18,"Cysteine":1.66,"Valine":3.24,"Methionine":1.82,"Tryptophan":0.89,"Phenylalanine":2.48,"Isoleucine":3.48,"Leucine":5.91,"Lysine":9.06,"Proline":5.72}},
+ {s:"S16", brand:"The Whole Truth Concentrate", type:"Concentrate-only ✔", protein:78.24, suc:"BLQ", tau:"BLQ", cu:0.869, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:["Top BCAA","Top leucine"],
+  aa:{"Aspartic acid":9.39,"Glutamic acid":15.37,"Serine":4.62,"Histidine":1.79,"Glycine":1.49,"Threonine":5.73,"Arginine":2.15,"Alanine":4.62,"Tyrosine":2.55,"Cysteine":2.07,"Valine":3.99,"Methionine":2.06,"Tryptophan":0.88,"Phenylalanine":2.82,"Isoleucine":4.42,"Leucine":8.49,"Lysine":9.69,"Proline":6.43}},
+ {s:"S31", brand:"TruNativ Whey", type:"Whey (blend / unspecified)", protein:74.24, suc:"BLQ", tau:"BLQ", cu:1.387, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:[],
+  aa:{"Aspartic acid":8.54,"Glutamic acid":13.64,"Serine":4.09,"Histidine":1.56,"Glycine":1.36,"Threonine":5.05,"Arginine":2.04,"Alanine":4.15,"Tyrosine":2.34,"Cysteine":1.89,"Valine":3.60,"Methionine":1.89,"Tryptophan":0.65,"Phenylalanine":2.53,"Isoleucine":3.96,"Leucine":6.78,"Lysine":9.37,"Proline":6.12}},
+ {s:"S32", brand:"Muscle Nectar (MN) Raw Whey", type:"Concentrate-only, unflavoured ✔", protein:80.22, suc:"BLQ", tau:"BLQ", cu:0.829, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:["Top protein"],
+  aa:{"Aspartic acid":8.98,"Glutamic acid":14.23,"Serine":4.26,"Histidine":1.63,"Glycine":1.39,"Threonine":5.50,"Arginine":2.11,"Alanine":4.46,"Tyrosine":2.41,"Cysteine":1.97,"Valine":3.78,"Methionine":2.02,"Tryptophan":0.71,"Phenylalanine":2.57,"Isoleucine":4.32,"Leucine":7.76,"Lysine":9.81,"Proline":6.69}},
+ {s:"S33", brand:"Phab Whey", type:"Whey (blend / unspecified)", protein:76.08, suc:"BLQ", tau:"BLQ", cu:0.531, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:["Lowest copper"],
+  aa:{"Aspartic acid":8.81,"Glutamic acid":13.76,"Serine":3.97,"Histidine":1.48,"Glycine":1.31,"Threonine":5.28,"Arginine":1.76,"Alanine":4.31,"Tyrosine":2.21,"Cysteine":1.99,"Valine":3.50,"Methionine":1.86,"Tryptophan":0.67,"Phenylalanine":2.33,"Isoleucine":4.08,"Leucine":7.14,"Lysine":9.10,"Proline":6.08}},
+ {s:"S34", brand:"MAXN Whey", type:"Whey (blend / unspecified)", protein:73.07, suc:"BLQ", tau:"BLQ", cu:0.929, hm:"All BLQ", afl:"All BLQ", st:"All BLQ", flags:[],
+  aa:{"Aspartic acid":8.52,"Glutamic acid":13.47,"Serine":4.04,"Histidine":1.47,"Glycine":1.37,"Threonine":5.06,"Arginine":1.89,"Alanine":4.18,"Tyrosine":2.17,"Cysteine":1.90,"Valine":3.38,"Methionine":1.86,"Tryptophan":0.68,"Phenylalanine":2.48,"Isoleucine":3.78,"Leucine":7.59,"Lysine":8.55,"Proline":6.22}},
+];

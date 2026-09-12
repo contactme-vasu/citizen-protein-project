@@ -39,8 +39,15 @@ Published paper + master chart:
 
 2024 study (see `Old Project/`):
 
-- `Old Project/gen_report.py` — generator script for the 2024 report
 - `Old Project/medi-103-e37724*.pdf/.docx/.xlsx` — Philips et al., *Medicine* 2024;103:14(e37724) + supplements
+- `Old Project/gen_report.py` — retired 12 Sep 2026 (moved to `.scratch/architecture/retired/`); the 2024 page now renders from shared modules, so the generator no longer has a template to fill
+
+## 🧩 Code layout
+
+- `shared/` — report-shell, lab-dataset, score and presentation modules (small interfaces, imported by both reports)
+- `data/` — yearly dataset adapters (`whey-2025.js`, `protein-2024.js`)
+- `tests/` — Node tests over the module seams (`node --test tests/<file>`, with explicit file paths)
+- `.scratch/architecture/` — spec, tickets and the browser re-verification prompt
 
 ## ⚠️ Disclaimer — please read
 
